@@ -1,0 +1,6 @@
+praw
+arxiv
+xmltodict
+pandas
+pytest
+python-dotenv
