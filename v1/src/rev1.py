@@ -38,7 +38,6 @@ if __name__ == "__main__":
     
     # Charger les variables d'environnement
     load_dotenv()
-    print("load_dotenv() : ",REDDIT_CLIENT_ID)  # Affiche la valeur de .env
     
     erreur = GestionErreurs(log_file="app_errors.log")
     

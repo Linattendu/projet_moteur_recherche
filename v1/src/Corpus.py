@@ -36,13 +36,14 @@ class Corpus:
         - faire la différence entre les différents corpus
         - aider dans l'affichage des logs
         - identifier le nom de la sauvegarde
-        @param nom Nom du corpus.
+        @param nom_corpus Nom du corpus.
+        ECT...
         """
         self.nom_corpus = nom_corpus
         self.authors = {}
         self.id2doc = {} # dictionnaire des documents
-        self.ndoc = 0
-        self.naut = 0
+        self.ndoc = 0 # nombre de commentaires
+        self.naut = 0 # nombre d'auteurs
 
     def ajouter_document(self, doc):
         """
