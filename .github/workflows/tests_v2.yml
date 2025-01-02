@@ -29,4 +29,4 @@ jobs:
         REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
         REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
         REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-      run: cd v1 && python -m pytest tests/
+      run: cd v2 && python -m pytest tests/

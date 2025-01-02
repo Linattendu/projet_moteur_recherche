@@ -1,7 +1,8 @@
 # Versions et environnements
-/v2/
+#/v2/
+/v1/
 /v3/
-!v1/** # inclure v1
+!v2/** # inclure v1
 !data/**
 /venv/
 .vscode/
