@@ -23,7 +23,7 @@ jobs:
       run: mkdir -p documentation/v1.0/html
 
     - name: Generate Documentation
-      run: doxygen doxyfile.conf
+      run: doxygen Doxyfile.conf
 
     - name: Deploy Documentation
       uses: peaceiris/actions-gh-pages@v3
