@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:
     branches:
-      - main  # Déclencher le workflow sur chaque push sur la branche "main"
+      - v1  # Déclencher le workflow sur chaque push sur la branche "v1"
 
 jobs:
   test:
