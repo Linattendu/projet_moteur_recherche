@@ -42,7 +42,7 @@ class Corpus:
         self.nom_corpus = nom_corpus
         self.authors = {}
         self.id2doc = {} # dictionnaire des documents
-        self.ndoc = 0 # nombre de commentaires
+        self.ndoc = 0 # nombre de documents
         self.naut = 0 # nombre d'auteurs
 
     def ajouter_document(self, doc):

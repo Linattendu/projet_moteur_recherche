@@ -1,4 +1,5 @@
 from datetime import datetime 
+
 """
 @file Document.py
 @brief Définition des classes représentant des documents et leur gestion.
@@ -35,7 +36,17 @@ class Document:
         self. url = url   # l’url source
         self.texte = texte  #le contenu textuel du document
         self.type_doc = type_doc
+
+
+
+    _id_counter = 0  # compteur statique pour les identifiants uniques
+
+    def __init__(self, titre, auteur, date, url, texte, type_doc="Document"):
+        self.id = Document._id_counter = Document._id_counter + 1  # génère un identifiant unique
+        self.titre, self.auteur, self.date, self.url, self.texte, self.type_doc = titre, auteur, date, url, texte, type_doc
+
     
+
     def getType(self):
         """
         @brief Retourne le type du document.

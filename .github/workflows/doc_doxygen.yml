@@ -1,0 +1,29 @@
+name: Generate and Deploy Doxygen Documentation
+
+on:
+  push:
+    branches:
+      - v1  # sur chaque push sur la branche v1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Doxygen
+      run: sudo apt-get install doxygen -y
+
+    - name: Install Graphviz
+      run: sudo apt-get install graphviz -y
+
+    - name: Create Output Directory
+      run: mkdir -p documentation/v1.0/html  # création du chemin requis pour OUTPUT_DIRECTORY
+
+    - name: Generate Documentation
+      run: doxygen Doxyfile.conf
+
+    - name: Deploy Documentation
+      uses: peace

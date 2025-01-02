@@ -1,0 +1,32 @@
+# Pytest configuration for running tests
+name: Run Pytest
+
+on:
+  push:
+    branches:
+      - v1    #Exécuter les tests sur les modifications de la branche 'main'
+  pull_request:
+    branches:
+      - v1    #Exécuter les tests sur chaque pull request vers 'main'
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3   # Récupérer le code du dépôt
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'   # Utiliser la version de Python souhaitée
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r v1/requirements.txt  #Installer les dépendances
+
+      - name: Run Pytest
+        run: |
+          PYTHONPATH=v1/src pytest v1/tests --disable-warnings

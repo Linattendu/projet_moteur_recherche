@@ -41,7 +41,7 @@ if __name__ == "__main__":
     
     erreur = GestionErreurs(log_file="app_errors.log")
     
-    theme = 'climate change'
+    theme = 'water' # mettre le thème souhaité 
     # Chemin de sauvegarde dans le dossier 'data'
     dossier_data = "../data"
     theme_sans_espace= theme.replace(" ", "")
