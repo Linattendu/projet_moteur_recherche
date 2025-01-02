@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:
     branches:
-      - v1  # Déclencher le workflow sur chaque push sur la branche "v1"
+      - v1  # Déclenchement uniquement sur les commits dans la branche "v1"
 
 jobs:
   test:
@@ -26,4 +26,5 @@ jobs:
     - name: Run Pytest
       env:
         PYTHONPATH: ./v1/src
-      run: pytest v1/tests --disable-warnings
+      run: |
+        cd v1 && python -m pytest tests/
