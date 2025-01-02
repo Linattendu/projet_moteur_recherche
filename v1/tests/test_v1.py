@@ -1,7 +1,4 @@
-import sys
-import os
 import subprocess
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from datetime import datetime
 from src.Document import Document, RedditDocument, ArxivDocument, DocumentFactory
 from src.RecuperationDocs import RedditScrap, ArxivScrap
