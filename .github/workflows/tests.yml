@@ -11,7 +11,7 @@ on:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
@@ -29,4 +29,4 @@ jobs:
 
       - name: Run Pytest
         run: |
-          PYTHONPATH=v1/src pytest v1/tests --disable-warnings
+          PYTHONPATH=v1/tests pytest v1/tests --disable-warnings

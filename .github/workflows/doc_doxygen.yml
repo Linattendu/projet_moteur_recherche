@@ -3,15 +3,15 @@ name: Generate and Deploy Doxygen Documentation
 on:
   push:
     branches:
-      - v1  # sur chaque push sur la branche v1
+      - v1
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install Doxygen
       run: sudo apt-get install doxygen -y
@@ -20,10 +20,14 @@ jobs:
       run: sudo apt-get install graphviz -y
 
     - name: Create Output Directory
-      run: mkdir -p documentation/v1.0/html  # création du chemin requis pour OUTPUT_DIRECTORY
+      run: mkdir -p documentation/v1.0/html
 
     - name: Generate Documentation
-      run: doxygen Doxyfile.conf
+      run: doxygen doxyfile.conf
 
     - name: Deploy Documentation
-      uses: peace
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./documentation/v1.0/html
+        destination_dir: v1.0
