@@ -4,10 +4,10 @@ name: Run Pytest
 on:
   push:
     branches:
-      - v1    #Exécuter les tests sur les modifications de la branche 'main'
+      - v1    #Exécuter les tests sur les modifications de la branche 'v1'
   pull_request:
     branches:
-      - v1    #Exécuter les tests sur chaque pull request vers 'main'
+      - v1    #Exécuter les tests sur chaque pull request vers 'v1'
 
 jobs:
   pytest:
@@ -29,5 +29,5 @@ jobs:
 
       - name: Run Pytest
         run: |
-          python -m pytest tests.test_v1 --disable-warnings
+          python -m pytest tests/ --disable-warnings
 
