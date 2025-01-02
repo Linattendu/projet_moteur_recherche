@@ -3,7 +3,8 @@ name: Run Tests
 on:
   push:
     branches:
-      - v1  # Déclenchement uniquement sur les commits dans la branche "v1"
+      - main
+      - v1
 
 jobs:
   test:
@@ -16,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.12  # Version de Python à utiliser
+        python-version: 3.12
 
     - name: Install dependencies
       run: |
@@ -25,6 +26,7 @@ jobs:
 
     - name: Run Pytest
       env:
-        PYTHONPATH: ./v1/src
-      run: |
-        cd v1 && python -m pytest tests/
+        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+      run: cd v1 && python -m pytest tests/
