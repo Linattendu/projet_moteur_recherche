@@ -29,5 +29,5 @@ jobs:
 
       - name: Run Pytest
         run: |
-          pytest v1/tests/test_v1.py --disable-warnings
+          python -m pytest v1.tests.test_v1 --disable-warnings
 
