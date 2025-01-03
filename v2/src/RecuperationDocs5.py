@@ -4,11 +4,8 @@ import xmltodict
 from datetime import datetime
 from src.Document import DocumentFactory
 from src.CorpusSingleton import CorpusSingleton
-#from src.constantes import *
-REDDIT_CLIENT_ID = "JEORY8A_0ZUmlz97oTwuwQ"
-REDDIT_CLIENT_SECRET = "fslpV3GIVfA0S3Vh9A7Hs81NRoABvw"
-USER_AGENT = "source"
-URL_ARXIV = 'http://export.arxiv.org/api/query?'
+from src.constantes import *
+ 
 
 
 """
@@ -25,10 +22,24 @@ Les erreurs sont gérées et loguées via GestionErreurs.
 """
 class RedditScrap:
     """
-    Classe pour le scraping de données depuis Reddit avec pagination.
-    """
+    @brief Classe pour le scraping de données depuis Reddit.
 
-    def __init__(self, corpus, erreur):
+    @details
+    Cette classe utilise la bibliothèque PRAW (Python Reddit API Wrapper) pour
+    interagir avec l'API de Reddit. Les posts sont récupérés par différentes sections :
+    - hot : Tendances actuelles.
+    - new : Posts les plus récents.
+    - top : Posts les mieux notés.
+    - rising : Posts gagnant en popularité.
+    """
+    def __init__(self,corpus, erreur):
+        """
+        @brief Initialise la classe RedditScrap.
+        @param corpus Instance de CorpusSingleton pour stocker les documents récupérés.
+        @param erreur Instance de GestionErreurs pour gérer les erreurs pendant le scraping.
+        """
+                
+        # créer une instance Reddit en lecture seule qui représente la connexion à l'API de Reddit
         self.reddit = praw.Reddit(
             client_id=REDDIT_CLIENT_ID,
             client_secret=REDDIT_CLIENT_SECRET,
@@ -36,50 +47,102 @@ class RedditScrap:
         )
         self.corpus = corpus
         self.erreur = erreur
-
-
-    def recuperer_posts(self, theme, limit=10):
+    
+    def chercher_section_hot(self, nom_communaute_reddit, limit):
         """
-        Récupère les posts récents et les commentaires associés pour compléter les textes vides.
+        @brief Récupère les posts populaires (hot) d'une communauté Reddit.
+        @param nom_communaute_reddit Nom de la communauté (subreddit).
+        @param limit Nombre maximal de posts à récupérer.
+        @return Générateur de posts Reddit.
         """
-        try:
-            theme = theme.replace(" ", "")
-            subreddit = self.reddit.subreddit(theme)
-            print("theme recuperer_posts : ", theme)
-            
-            # Récupérer les posts récents
-            posts = subreddit.new(limit=limit)
-            
-            for post in posts:
-                texte = post.selftext  # Texte du post
-                commentaire_concatene = ""
+        return nom_communaute_reddit.hot(limit=limit)
+    
+  
+    def chercher_section_new(self, nom_communaute_reddit, limit):
+        """
+        @brief Récupère les posts les plus récents (new).
+        @param nom_communaute_reddit Nom de la communauté (subreddit).
+        @param limit Nombre maximal de posts à récupérer.
+        @return Générateur de posts Reddit.
+        """
+        return nom_communaute_reddit.new(limit=limit)
+    
+   
+    def chercher_section_top(self, nom_communaute_reddit, limit):
+        """
+        @brief Récupère les posts les mieux notés (top).
+        @param nom_communaute_reddit Nom de la communauté (subreddit).
+        @param limit Nombre maximal de posts à récupérer.
+        @return Générateur de posts Reddit.
+        """
+        return nom_communaute_reddit.top(limit=limit)
 
-                # Si le texte est vide, récupérer les commentaires associés
-                if not texte:
-                    post.comments.replace_more(limit=0)  # Pas de "More comments"
-                    commentaires = post.comments.list()
-                    commentaire_concatene = " ".join([comment.body for comment in commentaires if comment.body])
-                    texte = commentaire_concatene if commentaire_concatene else "Pas de texte disponible."
+  
+    def chercher_section_rising(self, nom_communaute_reddit, limit):
+        """
+        @brief Récupère les posts en montée de popularité (rising).
+        @param nom_communaute_reddit Nom de la communauté (subreddit).
+        @param limit Nombre maximal de posts à récupérer.
+        @return Générateur de posts Reddit.
+        """
+        return nom_communaute_reddit.rising(limit=limit)
+
+    
+    def recuperer_posts(self, nom_communaute_reddit, limit=50):
+        """
+        @brief Récupère et ajoute les posts Reddit d'une communauté donnée au corpus.
+        @param nom_communaute_reddit Nom de la communauté Reddit.
+        @param limit Nombre maximal de posts à récupérer par section.
+        @details
+        Les posts sont récupérés par section (hot, new, top, rising). En cas d'erreur,
+        elle est loguée et continue pour les autres sections.
+        """
+        # Liste des méthodes à exécuter
+        liste_methodes = [
+            (self.chercher_section_hot, 'hot'),
+            (self.chercher_section_new, 'new'),
+            (self.chercher_section_top, 'top'),
+            (self.chercher_section_rising, 'rising')
+        ]
+                       
+        try : 
+            
+            # Parcourir chaque méthode
+            for methode, section in liste_methodes:
                 
-                # Utiliser l'URL du post Reddit (permalink)
-                url_post = f"https://www.reddit.com{post.permalink}"
+                # reddit n'accepete pas les mots composés avec des espaces
+                nom_communaute_reddit= nom_communaute_reddit.replace(" ", "")  
+                # Accèder à la communauté r/nom_communaute_reddit
+                objet_subreddit = self.reddit.subreddit(nom_communaute_reddit)
                 
-                # Créer un document Reddit avec le texte ou les commentaires
-                doc = DocumentFactory.creer_document(
-                    type_doc="Reddit",
-                    titre=post.title,
-                    auteur= str(post.author),
-                    date=datetime.fromtimestamp(post.created_utc),
-                    url=url_post,
-                    texte=texte,
-                    theme=self.corpus.theme,
-                    extra=post.num_comments
-                    )
-                #print(f"Document ajouté : {post.title} (Commentaires inclus : {len(commentaire_concatene.split())} mots)")
-                self.corpus.ajouter_document(doc)
+                # Récuperer les posts par la méthode correspondante  
+                posts = methode(objet_subreddit, limit)                                               
+                for post in posts:
+                    post.comments.replace_more(limit=0)  # Récupérer tous les commentaires
+                    #if post.selftext :
+                    texte = post.selftext
+                    for comment in post.comments.list():
+                        texte += ' ' + comment.body                    
+                        texte = texte.replace('\n', ' ')
+                        
+                        # Créer un document Reddit
+                        doc = DocumentFactory.creer_document(
+                            "Reddit",
+                            post.title,
+                            str(post.author),
+                            datetime.fromtimestamp(post.created_utc),
+                            post.url,
+                            texte,
+                            post.num_comments
+                        )
+                        
+                        # Ajouter au corpus
+                        self.corpus.ajouter_document(doc)
+                        
+                   
         
         except Exception as e:
-            self.erreur.afficher_erreurs(e, context=f"Subreddit: {theme}")
+            self.erreur.afficher_erreurs(e,context=f"Subreddit: {nom_communaute_reddit}, Section: {section}")
 
 
 class ArxivScrap:
@@ -99,7 +162,7 @@ class ArxivScrap:
         self.corpus = corpus
         self.erreur = erreur
 
-    def recuperer_articles(self, theme, max_results=10):
+    def recuperer_articles(self, theme, max_results=50):
         """
         @brief Récupère des articles depuis Arxiv en fonction d'un thème donné.
         @param theme Thème de recherche.
@@ -108,8 +171,6 @@ class ArxivScrap:
         Interroge l'API Arxiv, parse les résultats en XML, et ajoute les articles au corpus.
         """
         theme_nettoye = urllib.parse.quote_plus(theme)
-        print("theme + netttoye recuperer_articles : ", theme, theme_nettoye)
-        
         query = f"search_query=all:{theme_nettoye}&start=0&max_results={max_results}"
         url = self.base_url + query
         
@@ -167,14 +228,12 @@ class ArxivScrap:
                     datetime.now(),
                     entry.get('id', 'N/A'),
                     texte,
-                    theme,
                     co_auteurs
                 )
-                print(f"Document Arxiv créé: {doc}")  # Débogage: Afficher le document créé
+                print(f"Document créé: {doc}")  # Débogage: Afficher le document créé
                 
                 # Ajouter au corpus
                 self.corpus.ajouter_document(doc)
-            
             
         except urllib.error.URLError as e:
             # Erreur réseau (URL inaccessible)

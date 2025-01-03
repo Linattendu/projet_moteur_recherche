@@ -156,7 +156,7 @@ class DocumentFactory:
     Cette classe génère des objets RedditDocument, ArxivDocument ou Document générique en fonction du type spécifié.
     """
     @staticmethod
-    def creer_document(type_doc, titre, auteur, date, url, texte, extra=None):
+    def creer_document(type_doc, titre, auteur, date, url, texte, theme, extra=None):
         """
         @brief Crée un document en fonction de son type.
         @param type_doc Type du document ("Reddit" ou "Arxiv").
@@ -169,9 +169,9 @@ class DocumentFactory:
         @return Instance de Document, RedditDocument ou ArxivDocument.
         """
         if type_doc == "Reddit":
-            return RedditDocument(titre, auteur, date, url, texte, extra)
+            return RedditDocument(titre, auteur, date, url, texte, theme, extra)
         elif type_doc == "Arxiv":
-            return ArxivDocument(titre, auteur, date, url, texte, extra)
+            return ArxivDocument(titre, auteur, date, url, texte, theme, extra)
         else:
             return Document(titre, auteur, date, url, texte)
 
