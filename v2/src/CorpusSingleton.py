@@ -9,10 +9,10 @@ class CorpusSingleton(Corpus):
     """
     _instance = None
 
-    def __new__(cls, nom_corpus=""):
+    def __new__(cls, nom_corpus="", theme="science"):
         if cls._instance is None:
             cls._instance = super(CorpusSingleton, cls).__new__(cls)
-            Corpus.__init__(cls._instance, nom_corpus)  # Appelle __init__ de Corpus sur l'instance
+            Corpus.__init__(cls._instance, nom_corpus, theme)  # Appelle __init__ de Corpus sur l'instance
         return cls._instance
 
     def reset_instance(cls):

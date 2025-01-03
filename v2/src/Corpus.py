@@ -9,7 +9,7 @@ import uuid  # Pour générer des identifiants uniques
 
 
 class Corpus:
-    def __init__(self, nom_corpus=""):
+    def __init__(self, nom_corpus="", theme="science"):
         self.nom_corpus = nom_corpus
         self.authors = {}
         
@@ -19,7 +19,7 @@ class Corpus:
         self.ndoc = 0
         self.naut = 0
         self.texte_concatene = None  
-        
+        self.theme = theme
     def ajouter_document(self, doc):
         """
         Ajoute un document au corpus avec nettoyage du texte.

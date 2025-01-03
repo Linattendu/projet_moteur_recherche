@@ -89,6 +89,7 @@ if __name__ == "__main__":
     
     # Construire le moteur de recherche
     moteur = SearchEngine(corpus)
+    input("Entrez ")
 
     # Construire la matrice TFxIDF
     moteur.matrice.construire_matrice_TF()
