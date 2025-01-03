@@ -2,7 +2,7 @@ import pandas as pd
 import pickle
 from datetime import datetime
 from src.Author import Author
-
+import uuid
 """
 @file Corpus.py
 @brief Gestion du corpus de documents et des auteurs.
@@ -53,8 +53,19 @@ class Corpus:
         Si l'auteur du document n'existe pas, il est ajouté au dictionnaire des auteurs.
         Sinon, la production de l'auteur est mise à jour.
         """
-        self.id2doc[doc.url] = doc
+
+        identifiant_unique = str(uuid.uuid4())  # Génération d'un identifiant unique (UUID)
+        
+         # Vérification de l'unicité
+        if identifiant_unique in self.id2doc:
+            print(f"⚠️ Document déjà existant : {identifiant_unique}")
+            return False
+        
+        
+        # Ajouter le document avec l'ID généré
+        self.id2doc[identifiant_unique] = doc
         self.ndoc += 1
+
 
         # Ajoute ou met à jour l'auteur
         auteur_nom = doc.auteur
