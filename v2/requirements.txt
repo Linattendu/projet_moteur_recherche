@@ -4,6 +4,5 @@ xmltodict
 pandas
 pytest
 scipy
-doxygen
 python-dotenv
 
