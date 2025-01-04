@@ -115,6 +115,10 @@ if __name__ == "__main__":
     resultats = moteur.search("Python", n_resultats=10)
     print(resultats)
     
+
+
+
+    
     ''' 
     resultat :
     Titre   URL     Score
