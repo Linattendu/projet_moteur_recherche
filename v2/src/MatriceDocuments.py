@@ -10,12 +10,20 @@ from src.constantes import *
 class MatriceDocuments:
     """
     @brief Classe pour construire et gérer la matrice Document x Mots (TF et TFxIDF).
+    
+    Cette classe permet de construire le vocabulaire d'un corpus, de générer 
+    les matrices TF (Term Frequency) et TFxIDF (Term Frequency-Inverse Document Frequency), 
+    et de manipuler les données pour des recherches ou analyses textuelles.
     """
 
     def __init__(self, corpus):
         """
-        Initialise la classe avec un corpus de documents.
-        @param corpus Instance de la classe Corpus.
+        @brief Initialise la classe avec un corpus de documents.
+
+        @param corpus Instance de la classe Corpus contenant les documents à analyser.
+
+        @details Le constructeur initialise les structures nécessaires pour 
+                 gérer les matrices et charge le vocabulaire existant si disponible.
         """
         self.corpus = corpus
         self.mat_TF = None  # Matrice TF (sparse)
@@ -35,7 +43,12 @@ class MatriceDocuments:
     # ========================================
     def construire_vocab_et_matrice_TF(self):
         """
-        Construit simultanément le vocabulaire et la matrice TF.
+        @brief Construit simultanément le vocabulaire et la matrice TF.
+
+        @return scipy.sparse.csr_matrix La matrice TF sous forme creuse.
+
+        @details Cette méthode parcourt les documents du corpus pour construire un 
+                 vocabulaire unique et calculer la fréquence des termes pour chaque document.
         """
         rows, cols, data = [], [], []
         index = 0  # Identifiant unique des mots
@@ -86,7 +99,14 @@ class MatriceDocuments:
     # ========================================
     def construire_matrice_TFxIDF(self):
         """
-        Construit la matrice TFxIDF à partir de la matrice TF existante.
+        @brief Construit la matrice TFxIDF à partir de la matrice TF existante.
+
+        @return scipy.sparse.csr_matrix La matrice TFxIDF sous forme creuse.
+
+        @exception ValueError Si la matrice TF n'est pas construite avant TFxIDF.
+
+        @details Cette méthode calcule l'IDF pour chaque mot et multiplie la matrice TF 
+                 par ces poids pour obtenir une matrice TFxIDF.
         """
         if self.mat_TF is None:
             raise ValueError("🚨 La matrice TF doit être construite avant TFxIDF.")
@@ -113,7 +133,13 @@ class MatriceDocuments:
     # ========================================
     def vecteur_aligne_matrice(self, mots_cles):
         """
-        Transforme une requête utilisateur en vecteur aligné avec la matrice TFxIDF.
+        @brief Transforme une requête utilisateur en vecteur aligné avec la matrice TFxIDF.
+
+        @param mots_cles La requête utilisateur sous forme de chaîne de caractères.
+        @return numpy.ndarray Un vecteur aligné avec la matrice TFxIDF.
+
+        @details Cette méthode analyse les mots-clés de la requête, 
+                 et retourne un vecteur compatible avec les dimensions de la matrice TFxIDF.
         """
         vecteur_requete = np.zeros(len(self.vocab))
         mots = mots_cles.lower().split()
@@ -138,7 +164,10 @@ class MatriceDocuments:
     # ========================================
     def afficher_matrice(self):
         """
-        Affiche les matrices TF et TFxIDF pour débogage.
+        @brief Affiche les matrices TF et TFxIDF pour débogage.
+
+        @details Cette méthode affiche les matrices TF et TFxIDF sous forme dense 
+                 pour permettre une analyse manuelle.
         """
         if self.mat_TF is not None:
             print("🟩 Matrice TF :")

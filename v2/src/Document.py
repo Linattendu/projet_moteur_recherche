@@ -33,9 +33,9 @@ class Document:
         self.auteur = auteur # le nom de l’auteur
         self.date = date.date()  if isinstance(date, datetime) else datetime.now() # la date de publication
         self. url = url   # l’url source
-        self.texte = texte  #le contenu textuel du document
-        self.type_doc = type_doc
-        self.theme = theme
+        self.texte = texte  # le contenu textuel du document
+        self.type_doc = type_doc # le type de document (ex : reddit)
+        self.theme = theme # le theme (ex : science)
     
     def getType(self):
         return self.type_doc  # "Document" par défaut

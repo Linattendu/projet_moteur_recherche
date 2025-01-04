@@ -12,23 +12,12 @@ from src.Frequence import Frequence
 
 
 ''' 
-Tests de dcuments
+Tests de documents
 '''
-
-# rev2
 
 ''' 
 Tests de la classe Corpus (version 2)
 '''
-""" def test_ajout_document_corpus():
-    corpus = Corpus("Test Corpus")
-    doc = Document("Titre Test", "Auteur Test", datetime(2024, 1, 1), "https://adress_fictive.com", "Texte de test")
-    corpus.ajouter_document(doc)
-    assert len(corpus.id2doc) == 1
-    assert corpus.id2doc[doc.identifiant_unique].titre == "Titre Test"
-    assert corpus.ndoc == 1
-    assert corpus.naut == 1 """
-
 
 def test_ajouter_document():
     # Initialisation du corpus
@@ -50,16 +39,13 @@ def test_ajouter_document():
     assert corpus.ndoc == 1
     assert len(corpus.id2doc) == 1
 
-
-
-
 '''
  Tests pour MatriceDocuments : Construction des matrices TF 
 '''
 def test_construction_matrice_TF():
     corpus = Corpus("Test Corpus")
-    corpus.ajouter_document(Document("Doc1", "Auteur", datetime.now(), "url1", "Python est puissant"))
-    corpus.ajouter_document(Document("Doc2", "Auteur", datetime.now(), "url2", "Python pour le machine learning"))
+    corpus.ajouter_document(Document("Doc1", "Auteur1", datetime.now(), "url1", "Water resources are vital"))
+    corpus.ajouter_document(Document("Doc2", "Auteur2", datetime.now(), "url2", "Monitoring water quality is essential for ecosystems"))
     
     matrice = MatriceDocuments(corpus)
     matrice_TF = matrice.construire_vocab_et_matrice_TF()
@@ -69,14 +55,13 @@ def test_construction_matrice_TF():
     assert matrice_TF.shape == (2, len(matrice.vocab)), "La matrice TF a des dimensions incorrectes."
     assert matrice.vocab["python"]["freq"] > 0, "Le mot 'python' doit apparaître dans le vocabulaire."
 
-
 '''
  Tests pour MatriceDocuments : Construction des matrices TFxIDF.
 '''
 def test_construction_matrice_TFxIDF():
     corpus = Corpus("Test Corpus")
-    corpus.ajouter_document(Document("Doc1", "Auteur", datetime.now(), "url1", "Python est puissant"))
-    corpus.ajouter_document(Document("Doc2", "Auteur", datetime.now(), "url2", "Python pour le machine learning"))
+    corpus.ajouter_document(Document("Doc1", "Auteur1", datetime.now(), "url1", "Water resources are vital"))
+    corpus.ajouter_document(Document("Doc2", "Auteur2", datetime.now(), "url2", "Monitoring water quality is essential for ecosystems"))
     
     matrice = MatriceDocuments(corpus)
     matrice.construire_vocab_et_matrice_TF()
@@ -98,12 +83,12 @@ def test_nettoyage_texte():
 '''
 def test_construction_vocabulaire():
     corpus = Corpus("Test Corpus")
-    corpus.ajouter_document(Document("Doc1", "Auteur", datetime.now(), "url1", "Python est puissant"))
+    corpus.ajouter_document(Document("Doc1", "Auteur", datetime.now(), "url1", "Water resources are vital"))
     vocabulaire = Frequence.construire_vocabulaire(corpus.id2doc.values())
     
-    assert 'python' in vocabulaire
-    assert 'puissant' in vocabulaire
-    assert len(vocabulaire) == 3  # "Python", "est", "puissant"
+    assert 'water' in vocabulaire
+    assert 'resources' in vocabulaire
+    assert len(vocabulaire) == 4  # "Water", "resources", "are", "vital"
 
 '''
 Tests pour SearchEngine : Vérification de la recherche par mots-clés et des résultats pertinents. 

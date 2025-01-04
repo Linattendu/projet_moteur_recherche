@@ -5,12 +5,11 @@ from src.SearchEngine import SearchEngine
 from dotenv import load_dotenv
 from src.constantes import *
 import pandas as pd
-from CorpusMatrixManager import CorpusMatrixManager
+from CorpusMatrixManager1 import CorpusMatrixManager1
+
 # ============================================================
 # CONFIGURATION
 # ============================================================
-#pd.set_option('display.max_colwidth', None)
-DATA_DIR = "../data1"
 load_dotenv()
 
 # ============================================================

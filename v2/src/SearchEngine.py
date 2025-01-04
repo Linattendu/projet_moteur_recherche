@@ -10,6 +10,7 @@ from src.MatriceDocuments import MatriceDocuments
 from src.Utils import Utils
 import re
 
+
 class SearchEngine:
     """
     @brief Moteur de recherche utilisant des matrices TF et TFxIDF pour effectuer des recherches par mots-clés.
@@ -92,38 +93,48 @@ class SearchEngine:
         
 
 # ===========================
-# Exemple d'utilisation (Test)
+# Test
 # ===========================
 if __name__ == "__main__":
     from src.Document import Document
     
     # Créer un corpus simple
     corpus = Corpus("Test Corpus")
-    doc1 = Document("Doc1", "Alice", "2024-01-01", "https://www.reddit.com/r/", "Python is great", "Document reddit","Informatique")
-    doc2 = Document("Doc2", "Bob", "2024-01-02", "https://www.reddit.com/r/", "Python for machine learning","Document reddit","informatique")
-    doc3 = Document("Doc3", "Charlie", "2024-01-03", "https://www.reddit.com/r/", "Python is used in IA","Document reddit","informatique")
-    doc4 = Document("Doc4", "David", "2024-01-05", "https://www.reddit.com/r/", "IA transformes Python for data science","Document reddit","informatique")
-    
+
+    doc1 = Document(
+        "Doc1", "Author1", "2024-01-01",
+        "https://www.reddit.com/r/",
+        "Water resources are vital for agriculture",
+        "Document reddit",
+        "water"
+    )
+    doc2 = Document(
+        "Doc2",
+        "Author2",
+        "2024-01-02",
+        "https://www.reddit.com/r/",
+        "Monitoring water quality is essential for ecosystems",
+        "Document reddit",
+        "water"
+    )
+    doc3 = Document(
+        "Doc3",
+        "Author3",
+        "2024-01-03",
+        "https://www.reddit.com/r/",
+        "The preservation of water resources helps prevent droughts",
+        "Document reddit",
+        "water"
+    )
+
+
     ajout_doc1 = corpus.ajouter_document(doc1)
     ajout_doc2 = corpus.ajouter_document(doc2)
     ajout_doc3 = corpus.ajouter_document(doc3)
-    ajout_doc4 = corpus.ajouter_document(doc4)
 
-    print(ajout_doc1, ajout_doc2,ajout_doc3,ajout_doc4)
+    print(ajout_doc1, ajout_doc2,ajout_doc3)
     # Créer et tester le moteur de recherche
     moteur = SearchEngine(corpus)
-    resultats = moteur.search("Python", n_resultats=10)
+    resultats = moteur.search("water", n_resultats=10)
     print(resultats)
     
-
-
-
-    
-    ''' 
-    resultat :
-    Titre   URL     Score
-    0  Doc3  url3  0.571617
-    1  Doc1  url1  0.175428
-    2  Doc2  url2  0.122345
-    '''
-
