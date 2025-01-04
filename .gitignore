@@ -1,7 +1,5 @@
 # Versions et environnements
-/v1/src
-
-v1/
+/v1/
 /v3/
 !v2/** # inclure v2
 !data/**
@@ -44,7 +42,6 @@ dist/
 .project
 .classpath
 .settings/
-
 
 .Identifier
   
