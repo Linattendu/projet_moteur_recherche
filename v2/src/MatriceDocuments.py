@@ -6,7 +6,6 @@ import pickle
 import os
 from src.constantes import *
 
-DATA_DIR = "../data100"
 
 class MatriceDocuments:
     """

@@ -24,9 +24,7 @@ class SearchEngine:
         self.matrice = MatriceDocuments(corpus)
         self.matrice.construire_vocab_et_matrice_TF()
         self.matrice.construire_matrice_TFxIDF()
-        #self.vocab = Utils.dictionnaire_vocab(self.corpus) # Construire et synchroniser le vocabulaire
-        #self.matrice.vocab = self.vocab  # Transmettre le vocabulaire à MatriceDocuments
-            
+       
 
     def search(self, mots_cles, n_resultats=10):
         """
@@ -63,23 +61,15 @@ class SearchEngine:
             txt = self.extraire_extrait(doc.texte, mots_cles)
             
             scores.append((txt, doc.url, score))
-            #print("auteur : ", doc.auteur)
         
         # Trier par score décroissant
         scores = sorted(scores, key=lambda x: x[2], reverse=True)
-        #print("scores: ", scores)
         
         # Créer un DataFrame avec les résultats
-  #       resultats = pd.DataFrame(scores[:n_resultats], columns=["Titre", "URL", "Score"])
         resultats = pd.DataFrame([
             (txt, url, score) for (txt,  url, score) in scores[:n_resultats]
             if (url.startswith("https://www.reddit.com/r/") or url.startswith("http://arxiv.org")) and score > 0
         ], columns=["contenu", "URL", "Score"])
- 
-        """ resultats = pd.DataFrame([
-            (txt, url, score) for (txt, url, score) in scores[:n_resultats]
-            if score > 0  # Garde uniquement les documents avec des scores > 0
-        ], columns=["contenu", "URL", "Score"]) """
 
         return resultats
     
@@ -122,7 +112,7 @@ if __name__ == "__main__":
     print(ajout_doc1, ajout_doc2,ajout_doc3,ajout_doc4)
     # Créer et tester le moteur de recherche
     moteur = SearchEngine(corpus)
-    resultats = moteur.search("Python", n_resultats=4)
+    resultats = moteur.search("Python", n_resultats=10)
     print(resultats)
     
     ''' 

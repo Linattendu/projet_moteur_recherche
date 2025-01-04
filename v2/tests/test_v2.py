@@ -110,16 +110,41 @@ Tests pour SearchEngine : Vérification de la recherche par mots-clés et des r�
 '''
 def test_search_engine():
     corpus = Corpus("Test Corpus")
-    corpus.ajouter_document(Document("Doc1", "Author", datetime.now(), "https://www.reddit.com/r/", "Water resources are vital for agriculture", "Document reddit","water"))
-    corpus.ajouter_document(Document("Doc2", "Author", datetime.now(), "https://www.reddit.com/r/", "Monitoring water quality is essential for ecosystems", "Document reddit","water"))
-    corpus.ajouter_document(Document("Doc3", "Author", datetime.now(), "https://www.reddit.com/r/", "The preservation of water resources helps prevent droughts", "Document reddit","water"))
+    corpus.ajouter_document(Document(
+        "Doc1", "Author1", "2024-01-01", 
+        "https://www.reddit.com/r/", 
+        "Water resources are vital for agriculture", 
+        "Document reddit",
+        "water"
+        ))
+    corpus.ajouter_document(Document(
+        "Doc2",
+        "Author2", 
+        "2024-01-02", 
+        "https://www.reddit.com/r/", 
+        "Monitoring water quality is essential for ecosystems", 
+        "Document reddit",
+        "water"
+        ))
+    corpus.ajouter_document(Document(
+        "Doc3", 
+        "Author3", 
+        "2024-01-03", 
+        "https://www.reddit.com/r/", 
+        "The preservation of water resources helps prevent droughts", 
+        "Document reddit",
+        "water"
+        ))
 
     moteur = SearchEngine(corpus)
     moteur.matrice.construire_vocab_et_matrice_TF()
     moteur.matrice.construire_matrice_TFxIDF()
 
-    resultats = moteur.search("Water", n_resultats=2)
-    assert len(resultats) == 2
+    print("corpus", corpus)
+
+    resultats = moteur.search("Water", n_resultats=3)
+    print(resultats)
+    assert len(resultats) == 3
     assert resultats.iloc[0]['contenu'] == "Water resources are vital for agriculture".lower()
 
 '''
@@ -128,7 +153,7 @@ Test du Programme Principal (Simulation via subprocess) rev2
 
 def test_main_execution_v2():
     result = subprocess.run(
-        ["python", "-m", "src.test"],
+        ["python", "-m", "src.Verifier_moteur_recherche"],
         capture_output=True,
         text=True
     )
