@@ -9,7 +9,7 @@ import uuid  # Pour générer des identifiants uniques
 
 
 class Corpus:
-    def __init__(self, nom_corpus="", theme="science"):
+    def __init__(self, nom_corpus=None, theme=None):
         self.nom_corpus = nom_corpus
         self.authors = {}
         
@@ -20,12 +20,15 @@ class Corpus:
         self.naut = 0
         self.texte_concatene = None  
         self.theme = theme
+        
     def ajouter_document(self, doc):
         """
         Ajoute un document au corpus avec nettoyage du texte.
         """        
         
         identifiant_unique = str(uuid.uuid4())  # Génération d'un identifiant unique (UUID)
+        
+        doc.texte = Utils.nettoyer_texte(doc.texte)  # Nettoyage du texte avant ajout
         
          # Vérification de l'unicité
         if identifiant_unique in self.id2doc:
@@ -44,6 +47,12 @@ class Corpus:
         
         self.authors[auteur_nom].add(identifiant_unique, doc)
         
+       
+        if doc.theme is None:
+            doc.theme = self.theme  # Utilisation du thème du corpus par défaut
+        
+
+        
         #print(f"✅ Document ajouté : {doc.titre} (ID: {identifiant_unique})")
         return True
 
@@ -53,10 +62,10 @@ class Corpus:
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
-            print("🔄 Concaténation automatique du corpus...")
+            #print("🔄 Concaténation automatique du corpus...")
             self.texte_concatene = Utils.concatener_textes(self)
         
-        print(f"🔍 Recherche du mot-clé : {mot_cle}\n")
+        #print(f"🔍 Recherche du mot-clé : {mot_cle}\n")
         #print(f"le texte du corpus : \n {self.texte_concatene} \n" )
 
         # Regex : capturer 4 mots avant et après le mot-clé
@@ -73,8 +82,8 @@ class Corpus:
         resultats = [f"{p[0]}{mot_cle}{p[1]}" for p in passages]
 
         # Affichage pour contrôle
-        for i,passage in enumerate(resultats):
-            print(f"✅ le passage {i + 1 } : {passage}\n")
+        """ for i,passage in enumerate(resultats):
+            print(f"✅ le passage {i + 1 } : {passage}\n") """
 
         return resultats
 
@@ -85,7 +94,7 @@ class Corpus:
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
-            print("🔄 Concaténation automatique du corpus...")
+            #print("🔄 Concaténation automatique du corpus...")
             self.texte_concatene = Utils.concatener_textes(self)
             
         occurences = list(re.finditer(re.escape(mot_cle), self.texte_concatene, re.IGNORECASE))

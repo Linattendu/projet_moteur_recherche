@@ -8,9 +8,7 @@ from scipy.linalg import norm
 from src.Corpus import Corpus
 from src.MatriceDocuments import MatriceDocuments 
 from src.Utils import Utils
-#pd.set_option('display.max_colwidth', None)
 import re
-#pd.set_option('display.max_colwidth', None)
 
 class SearchEngine:
     """
@@ -24,13 +22,13 @@ class SearchEngine:
         """
         self.corpus = corpus
         self.matrice = MatriceDocuments(corpus)
-        self.matrice.construire_matrice_TF()
+        self.matrice.construire_vocab_et_matrice_TF()
         self.matrice.construire_matrice_TFxIDF()
         #self.vocab = Utils.dictionnaire_vocab(self.corpus) # Construire et synchroniser le vocabulaire
         #self.matrice.vocab = self.vocab  # Transmettre le vocabulaire à MatriceDocuments
             
 
-    def search(self, mots_cles, n_resultats=50):
+    def search(self, mots_cles, n_resultats=10):
         """
         @brief Recherche des documents correspondant aux mots-clés donnés.
         @param mots_cles Requête utilisateur (chaîne de caractères).
@@ -62,39 +60,44 @@ class SearchEngine:
                 score = 1 - cosine(vecteur_requete, vecteur_doc)
             
            
-            txt = self.extraire_extrait(doc.texte, mots_cles, taille_contexte=10)
+            txt = self.extraire_extrait(doc.texte, mots_cles)
             
-            scores.append((doc.titre, doc.auteur, txt, doc.url, score))
+            scores.append((txt, doc.url, score))
+            #print("auteur : ", doc.auteur)
         
         # Trier par score décroissant
-        scores = sorted(scores, key=lambda x: x[4], reverse=True)
+        scores = sorted(scores, key=lambda x: x[2], reverse=True)
+        #print("scores: ", scores)
         
         # Créer un DataFrame avec les résultats
-        #resultats = pd.DataFrame(scores[:n_resultats], columns=["Titre", "URL", "Score"])
+  #       resultats = pd.DataFrame(scores[:n_resultats], columns=["Titre", "URL", "Score"])
         resultats = pd.DataFrame([
-            (titre,auteur, txt, url, score) for (titre,auteur, txt,  url, score) in scores[:n_resultats]
+            (txt, url, score) for (txt,  url, score) in scores[:n_resultats]
             if (url.startswith("https://www.reddit.com/r/") or url.startswith("http://arxiv.org")) and score > 0
-        ], columns=["Titre", "auteur", "contenu", "URL", "Score"])
-        
+        ], columns=["contenu", "URL", "Score"])
+ 
+        """ resultats = pd.DataFrame([
+            (txt, url, score) for (txt, url, score) in scores[:n_resultats]
+            if score > 0  # Garde uniquement les documents avec des scores > 0
+        ], columns=["contenu", "URL", "Score"]) """
+
         return resultats
     
     @staticmethod
-    def extraire_extrait(texte, mot_cle, taille_contexte=15):
+    def extraire_extrait(texte, mot_cle):
         # 1. Nettoyage et préparation du texte
         texte = texte.lower()
         mot_cle = mot_cle.lower()
-        
-        
         
         # 2. Expression régulière pour capturer le mot-clé avec 10 mots avant et après
         pattern = r'(\b\w+\b\s*){0,' + str(5) + r'}' + re.escape(mot_cle) + r'(\s*\b\w+\b){0,' + str(5) + r'}'
         
         matches = re.finditer(pattern, texte, re.MULTILINE)
         
-        for matchNum, match in enumerate(matches, start=1):
+        for _, match in enumerate(matches, start=1):
             if match:
                 return match.group()  # Retourne l'extrait complet (mot-clé + contexte)
-                return "Extrait non disponible"
+            return "Extrait non disponible"
 
         
 
@@ -106,10 +109,10 @@ if __name__ == "__main__":
     
     # Créer un corpus simple
     corpus = Corpus("Test Corpus")
-    doc1 = Document("Doc1", "Alice", "2024-01-01", "url1", "Python is great")
-    doc2 = Document("Doc2", "Bob", "2024-01-02", "url2", "Python for machine learning")
-    doc3 = Document("Doc3", "Charlie", "2024-01-03", "url3", "Python is used in IA")
-    doc4 = Document("Doc4", "David", "2024-01-05", "url4", "IA transformes Python for data science")
+    doc1 = Document("Doc1", "Alice", "2024-01-01", "https://www.reddit.com/r/", "Python is great", "Document reddit","Informatique")
+    doc2 = Document("Doc2", "Bob", "2024-01-02", "https://www.reddit.com/r/", "Python for machine learning","Document reddit","informatique")
+    doc3 = Document("Doc3", "Charlie", "2024-01-03", "https://www.reddit.com/r/", "Python is used in IA","Document reddit","informatique")
+    doc4 = Document("Doc4", "David", "2024-01-05", "https://www.reddit.com/r/", "IA transformes Python for data science","Document reddit","informatique")
     
     ajout_doc1 = corpus.ajouter_document(doc1)
     ajout_doc2 = corpus.ajouter_document(doc2)

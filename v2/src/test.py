@@ -5,9 +5,8 @@ from src.RecuperationDocs import RedditScrap, ArxivScrap
 from src.GestionErreurs import GestionErreurs
 from src.SearchEngine import SearchEngine
 from src.constantes import * 
-
-
-
+import pandas as pd
+from src.constantes import *
 
 """
 @file rev2.py
@@ -45,18 +44,17 @@ if __name__ == "__main__":
     erreur = GestionErreurs(log_file="app_errors.log")
     
     theme = 'medicine'
-    # Chemin de sauvegarde dans le dossier 'data'
-    dossier_data = "../data1"
+    # Chemin de sauvegarde dans le dossier 'data1'
     theme_sans_espace= theme.replace(" ", "")
     nom_corpus = f"corpus_{theme_sans_espace}"
     nom_fichier = nom_corpus + ".pkl"
-    chemin_sauvegarde = os.path.join(dossier_data, nom_fichier)
+    chemin_sauvegarde = os.path.join(DATA_DIR, nom_fichier)
     
     corpus = CorpusSingleton(nom_corpus)
     
     # Créer le dossier 'data' s'il n'existe pas
-    if not os.path.exists(dossier_data):
-        os.makedirs(dossier_data)
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
     
     # Charger ou créer un nouveau corpus
     if os.path.exists(chemin_sauvegarde):
@@ -70,10 +68,10 @@ if __name__ == "__main__":
         # Scraping Reddit et Arxiv
         erreur = GestionErreurs(log_file="app_errors.log")
         reddit_scraper = RedditScrap(corpus, erreur)
-        reddit_scraper.recuperer_posts(theme, limit=50)
+        reddit_scraper.recuperer_posts(theme, limit=10)
 
         arxiv_scraper = ArxivScrap(corpus, erreur)
-        arxiv_scraper.recuperer_articles(theme, max_results=50)
+        arxiv_scraper.recuperer_articles(theme, max_results=10)
 
         # Sauvegarder le corpus
         corpus.save(chemin_sauvegarde)
@@ -89,10 +87,10 @@ if __name__ == "__main__":
     
     # Construire le moteur de recherche
     moteur = SearchEngine(corpus)
-    input("Entrez ")
+    #input("Entrez ")
 
     # Construire la matrice TFxIDF
-    moteur.matrice.construire_matrice_TF()
+    moteur.matrice.construire_vocab_et_matrice_TF()
     moteur.matrice.construire_matrice_TFxIDF()
 
     # Effectuer une recherche

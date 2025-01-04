@@ -75,9 +75,10 @@ class RedditScrap:
                     theme=self.corpus.theme,
                     extra=post.num_comments
                     )
+
                 #print(f"Document ajouté : {post.title} (Commentaires inclus : {len(commentaire_concatene.split())} mots)")
                 self.corpus.ajouter_document(doc)
-        
+                print("document ajouté", doc.texte)
         except Exception as e:
             self.erreur.afficher_erreurs(e, context=f"Subreddit: {theme}")
 
@@ -171,10 +172,10 @@ class ArxivScrap:
                     co_auteurs
                 )
                 print(f"Document Arxiv créé: {doc}")  # Débogage: Afficher le document créé
-                
+
                 # Ajouter au corpus
                 self.corpus.ajouter_document(doc)
-            
+
             
         except urllib.error.URLError as e:
             # Erreur réseau (URL inaccessible)
@@ -187,4 +188,3 @@ class ArxivScrap:
         except Exception as e:
             # Gestion des erreurs générales
             self.erreur.afficher_erreurs(e, context=f"Erreur générale - Thème : {theme}")
-                
