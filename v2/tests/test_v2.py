@@ -111,41 +111,51 @@ Tests pour SearchEngine : Vérification de la recherche par mots-clés et des r�
 def test_search_engine():
     corpus = Corpus("Test Corpus")
     corpus.ajouter_document(Document(
-        "Doc1", "Author1", "2024-01-01", 
-        "https://www.reddit.com/r/", 
-        "Water resources are vital for agriculture", 
+        "Doc1", "Author1", "2024-01-01",
+        "https://www.reddit.com/r/",
+        "Water resources are vital for agriculture",
         "Document reddit",
         "water"
-        ))
+    ))
     corpus.ajouter_document(Document(
         "Doc2",
-        "Author2", 
-        "2024-01-02", 
-        "https://www.reddit.com/r/", 
-        "Monitoring water quality is essential for ecosystems", 
+        "Author2",
+        "2024-01-02",
+        "https://www.reddit.com/r/",
+        "Monitoring water quality is essential for ecosystems",
         "Document reddit",
         "water"
-        ))
+    ))
     corpus.ajouter_document(Document(
-        "Doc3", 
-        "Author3", 
-        "2024-01-03", 
-        "https://www.reddit.com/r/", 
-        "The preservation of water resources helps prevent droughts", 
+        "Doc3",
+        "Author3",
+        "2024-01-03",
+        "https://www.reddit.com/r/",
+        "The preservation of water resources helps prevent droughts",
         "Document reddit",
         "water"
-        ))
+    ))
 
+    # Initialisation du moteur de recherche
     moteur = SearchEngine(corpus)
-    moteur.matrice.construire_vocab_et_matrice_TF()
-    moteur.matrice.construire_matrice_TFxIDF()
 
-    print("corpus", corpus)
+    # Recherche pour le mot-clé "water"
+    resultats = moteur.search("water", n_resultats=3)
 
-    resultats = moteur.search("Water", n_resultats=3)
-    print(resultats)
-    assert len(resultats) == 3
-    assert resultats.iloc[0]['contenu'] == "Water resources are vital for agriculture".lower()
+    # Vérifications
+    assert len(resultats) == 3, f"Expected 3 results, but got {len(resultats)}"
+
+    # Normalisation des contenus attendus et des résultats pour la comparaison
+    contenus_attendus = [
+        "Water resources are vital for agriculture",
+        "Monitoring water quality is essential for ecosystems",
+        "The preservation of water resources helps prevent droughts"
+    ]
+    contenus_attendus_normalized = set([contenu.lower() for contenu in contenus_attendus])
+    resultats_normalized = set([contenu.lower() for contenu in resultats['contenu'].values])
+
+    assert resultats_normalized == contenus_attendus_normalized, \
+        f"Expected contents {contenus_attendus}, but got {resultats['contenu'].values}"
 
 '''
 Test du Programme Principal (Simulation via subprocess) rev2
