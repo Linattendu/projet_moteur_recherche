@@ -1,5 +1,7 @@
 # Versions et environnements
-/v1/
+/v1/src
+
+v1/
 /v3/
 !v2/** # inclure v2
 !data/**
@@ -30,9 +32,9 @@ __pycache__/
 htmlcov/
 
 # Build et distribution
-docs/_build/v2/
+docs/_build/v1/
 docs/_build/v3/
-!docs/_build/v1/**
+!docs/_build/v2/**
 build/
 dist/
 *.egg-info/
