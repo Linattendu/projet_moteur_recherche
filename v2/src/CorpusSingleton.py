@@ -22,14 +22,6 @@ class CorpusSingleton(Corpus):
         """
         cls._instance = None
 
-    """ def ajouter_document(self, doc):
-        
-        #brief Ajoute un document au corpus.
-        #param doc Document à ajouter.
-        
-        self.id2doc[doc.url] = doc  # Utilisation de id2doc au lieu de documents
-        self.ndoc += 1 """
-    
     def afficher_documents(self):
         """
         @brief Affiche tous les documents du corpus.

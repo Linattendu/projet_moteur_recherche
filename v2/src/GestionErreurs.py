@@ -62,9 +62,3 @@ class GestionErreurs:
             self.logger.error(f"Erreur de valeur : {error_message}")
         else:
             self.logger.error(f"Erreur inconnue : {error_message}")
-
-        # Affiche dans la console (optionnel)
-        print(error_message)
-
-        # Optionnel : Relancer l'exception après log
-        # raise exception

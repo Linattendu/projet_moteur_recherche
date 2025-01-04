@@ -4,7 +4,7 @@ import xmltodict
 from datetime import datetime
 from src.Document import DocumentFactory
 from src.CorpusSingleton import CorpusSingleton
-#from src.constantes import *
+
 REDDIT_CLIENT_ID = "JEORY8A_0ZUmlz97oTwuwQ"
 REDDIT_CLIENT_SECRET = "fslpV3GIVfA0S3Vh9A7Hs81NRoABvw"
 USER_AGENT = "source"
@@ -25,7 +25,7 @@ Les erreurs sont gérées et loguées via GestionErreurs.
 """
 class RedditScrap:
     """
-    Classe pour le scraping de données depuis Reddit avec pagination.
+    @brief Classe pour le scraping de données depuis Reddit avec pagination.
     """
 
     def __init__(self, corpus, erreur):
@@ -40,7 +40,7 @@ class RedditScrap:
 
     def recuperer_posts(self, theme, limit=10):
         """
-        Récupère les posts récents et les commentaires associés pour compléter les textes vides.
+        @brief Récupère les posts récents et les commentaires associés pour compléter les textes vides.
         """
         try:
             theme = theme.replace(" ", "")
@@ -76,9 +76,7 @@ class RedditScrap:
                     extra=post.num_comments
                     )
 
-                #print(f"Document ajouté : {post.title} (Commentaires inclus : {len(commentaire_concatene.split())} mots)")
                 self.corpus.ajouter_document(doc)
-                print("document ajouté", doc.texte)
         except Exception as e:
             self.erreur.afficher_erreurs(e, context=f"Subreddit: {theme}")
 
@@ -147,12 +145,12 @@ class ArxivScrap:
                         if isinstance(auteur, dict) and 'name' in auteur:
                             co_auteurs.append(auteur['name'])
                         else:
-                            print(f"Auteur non valide: {auteur}")  # Débogage: Afficher les auteurs non valides
+                            print(f"Auteur non valide: {auteur}")
                 elif isinstance(auteurs, dict):
                     if 'name' in auteurs:
                         co_auteurs.append(auteurs['name'])
                     else:
-                        print(f"Auteur non valide: {auteurs}")  # Débogage: Afficher les auteurs non valides
+                        print(f"Auteur non valide: {auteurs}")
                 elif isinstance(auteurs, str):
                     co_auteurs.append(auteurs)
                 else:
@@ -171,7 +169,7 @@ class ArxivScrap:
                     theme,
                     co_auteurs
                 )
-                print(f"Document Arxiv créé: {doc}")  # Débogage: Afficher le document créé
+                print(f"Document Arxiv créé: {doc}")
 
                 # Ajouter au corpus
                 self.corpus.ajouter_document(doc)

@@ -52,8 +52,6 @@ class Corpus:
             doc.theme = self.theme  # Utilisation du thème du corpus par défaut
         
 
-        
-        #print(f"✅ Document ajouté : {doc.titre} (ID: {identifiant_unique})")
         return True
 
     def search(self, mot_cle):
@@ -62,11 +60,7 @@ class Corpus:
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
-            #print("🔄 Concaténation automatique du corpus...")
             self.texte_concatene = Utils.concatener_textes(self)
-        
-        #print(f"🔍 Recherche du mot-clé : {mot_cle}\n")
-        #print(f"le texte du corpus : \n {self.texte_concatene} \n" )
 
         # Regex : capturer 4 mots avant et après le mot-clé
         pattern = rf'(\b\w+(?:\s+\w+){{0,3}}\s+)\b{re.escape(mot_cle.lower())}\b(\s+\w+(?:\s+\w+){{0,3}})'
@@ -94,7 +88,6 @@ class Corpus:
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
-            #print("🔄 Concaténation automatique du corpus...")
             self.texte_concatene = Utils.concatener_textes(self)
             
         occurences = list(re.finditer(re.escape(mot_cle), self.texte_concatene, re.IGNORECASE))
@@ -131,11 +124,17 @@ class Corpus:
             print(f"   Auteur : {doc.auteur}")
             print(f"   Date : {doc.date}")
             print(f"   URL : {doc.url}")
-            print(f"   Contenu : {doc.texte}")  # Affiche seulement les 200 premiers caractères
+            print(f"   Contenu : {doc.texte}")  # Affiche les 200 premiers caractères
             print("-" * 80)
 
     
     def stats(self, n=10):
+        """
+        @brief Retourne les `n` mots les plus fréquents du corpus.
+
+        @param n Nombre de mots à inclure dans les résultats (par défaut 10).
+        @return pandas.DataFrame DataFrame avec deux colonnes : 'Mot' et 'Fréquence'.
+        """
         compteur = Frequence.compter_occurrences(self.id2doc.values())
         freq_df = pd.DataFrame(compteur.most_common(n), columns=['Mot', 'Fréquence'])
         return freq_df
