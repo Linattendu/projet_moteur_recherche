@@ -9,10 +9,11 @@ class CorpusSingleton(Corpus):
     """
     _instance = None
 
-    def __new__(cls, nom_corpus="", theme="science"):
+    def __new__(cls, nom_corpus="", theme=""):
         if cls._instance is None:
             cls._instance = super(CorpusSingleton, cls).__new__(cls)
             Corpus.__init__(cls._instance, nom_corpus, theme)  # Appelle __init__ de Corpus sur l'instance
+            print("theme CorpusSingleton : ", theme) 
         return cls._instance
 
     def reset_instance(cls):
@@ -21,13 +22,13 @@ class CorpusSingleton(Corpus):
         """
         cls._instance = None
 
-    def ajouter_document(self, doc):
-        """
-        @brief Ajoute un document au corpus.
-        @param doc Document à ajouter.
-        """
+    """ def ajouter_document(self, doc):
+        
+        #brief Ajoute un document au corpus.
+        #param doc Document à ajouter.
+        
         self.id2doc[doc.url] = doc  # Utilisation de id2doc au lieu de documents
-        self.ndoc += 1
+        self.ndoc += 1 """
     
     def afficher_documents(self):
         """

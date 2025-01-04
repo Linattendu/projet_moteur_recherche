@@ -19,7 +19,7 @@ class Document:
     Cette classe modélise un document avec des attributs comme le titre, l'auteur,
     la date de publication, l'URL source et le texte du document.
     """
-    def __init__(self, titre, auteur, date, url, texte,type_doc="Document"):
+    def __init__(self, titre, auteur, date, url, texte,type_doc="Document", theme=None):
         """
         @brief Initialise un document générique.
         @param titre Titre du document.
@@ -31,17 +31,14 @@ class Document:
         """
         self.titre = titre  # le titre du document
         self.auteur = auteur # le nom de l’auteur
-        self.date = date  if isinstance(date, datetime) else datetime.now() # la date de publication
+        self.date = date.date()  if isinstance(date, datetime) else datetime.now() # la date de publication
         self. url = url   # l’url source
         self.texte = texte  #le contenu textuel du document
         self.type_doc = type_doc
+        self.theme = theme
     
     def getType(self):
-        """
-        @brief Retourne le type du document.
-        @return Chaîne indiquant le type de document.
-        """
-        return self.type_doc
+        return self.type_doc  # "Document" par défaut
     
     def __repr__(self):
         """
@@ -58,7 +55,7 @@ class RedditDocument(Document):
     Cette classe étend la classe Document pour inclure des attributs supplémentaires
     comme le nombre de commentaires associés à un post Reddit.
     """
-    def __init__(self, titre, auteur, date, url, texte, commentaires):
+    def __init__(self, titre, auteur, date, url, texte,theme, nb_commentaires):
         """
         @brief Initialise un document Reddit.
         @param titre Titre du post Reddit.
@@ -66,38 +63,38 @@ class RedditDocument(Document):
         @param date Date de publication.
         @param url URL du post.
         @param texte Contenu du post.
-        @param commentaires Nombre de commentaires sur le post.
+        @param nb_commentaires Nombre de commentaires sur le post.
         """
-        super().__init__(titre, auteur, date, url, texte, type_doc="Reddit")
-        self.commentaires = commentaires
+        super().__init__(titre, auteur, date, url, texte, type_doc="Reddit", theme=None)
+        self.nb_commentaires = nb_commentaires
 
     def getType(self):
         """
         @brief Retourne le type du document.
         @return Chaîne indiquant le type de document.
         """
-        return self.type_doc
+        return "Reddit"
 
     def __str__(self):
         """
         @brief Représentation textuelle d'un post Reddit.
         @return Chaîne décrivant le document Reddit avec son nombre de commentaires.
         """
-        return f"Reddit Document: {self.titre} - {self.auteur} - {self.commentaires} commentaires"
+        return f"Reddit Document: {self.titre} - {self.auteur} - {self.nb_commentaires} commentaires"
 
     def get_commentaires(self):
         """
         @brief Retourne le nombre de commentaires.
         @return Nombre de commentaires.
         """
-        return self.commentaires
+        return self.nb_commentaires
 
-    def set_commentaires(self, commentaires):
+    def set_commentaires(self, nb_commentaires):
         """
         @brief Met à jour le nombre de commentaires.
         @param commentaires Nouveau nombre de commentaires.
         """
-        self.commentaires = commentaires
+        self.nb_commentaires = nb_commentaires
 
 class ArxivDocument(Document):
     """
@@ -106,7 +103,7 @@ class ArxivDocument(Document):
     @details
     Cette classe ajoute la gestion des co-auteurs aux attributs de base d'un document.
     """
-    def __init__(self, titre, auteurs, date, url, texte, coauteurs):
+    def __init__(self, titre, auteurs, date, url, texte, theme, coauteurs):
         """
         @brief Initialise un document Arxiv.
         @param titre Titre de l'article.
@@ -116,7 +113,7 @@ class ArxivDocument(Document):
         @param texte Résumé de l'article.
         @param coauteurs Liste des co-auteurs.
         """
-        super().__init__(titre, auteurs, date, url, texte, type_doc="Arxiv")
+        super().__init__(titre, auteurs, date, url, texte, type_doc="Arxiv", theme=None)
         self.coauteurs = coauteurs
 
     def __str__(self):
@@ -145,7 +142,7 @@ class ArxivDocument(Document):
         @brief Retourne le type du document.
         @return Chaîne indiquant le type de document.
         """
-        return self.type_doc
+        return "Arxiv"
 
 
 class DocumentFactory:
@@ -169,12 +166,11 @@ class DocumentFactory:
         @return Instance de Document, RedditDocument ou ArxivDocument.
         """
         if type_doc == "Reddit":
-            return RedditDocument(titre, auteur, date, url, texte, theme, extra)
+            return RedditDocument(titre, auteur, date, url, texte,theme, extra)
         elif type_doc == "Arxiv":
             return ArxivDocument(titre, auteur, date, url, texte, theme, extra)
         else:
-            return Document(titre, auteur, date, url, texte)
-
+            return Document(titre, auteur, date, url, texte, theme)
 
 ''' 
 test pour créer et afficher des instances de RedditDocument et ArxivDocument en utilisant le polymorphisme. Chaque document est affiché avec son type (Reddit ou Arxiv)
@@ -182,10 +178,10 @@ test pour créer et afficher des instances de RedditDocument et ArxivDocument en
 # Test de l'ajout de documents et affichage avec polymorphisme
 if __name__ == "__main__":
     docs = [
-        RedditDocument("Post Reddit 1", "Alice", datetime(2024, 1, 10), "https://reddit.com/post1", "Contenu Reddit 1", 15),
-        ArxivDocument("Article Arxiv 1", "Bob", datetime(2023, 12, 5), "https://arxiv.org/1234", "Résumé Arxiv 1", ["Coauteur1", "Coauteur2"]),
-        RedditDocument("Post Reddit 2", "Charlie", datetime(2024, 2, 15), "https://reddit.com/post2", "Contenu Reddit 2", 45)
+        RedditDocument("Post Reddit 1", "Alice", datetime(2024, 1, 10), "https://reddit.com/post1", "Contenu Reddit 1", "politics", nb_commentaires=15),
+        ArxivDocument("Article Arxiv 1", "Bob", datetime(2023, 12, 5), "https://arxiv.org/1234", "Résumé Arxiv 1","sciences", ["Coauteur1", "Coauteur2"]),
+        RedditDocument("Post Reddit 2", "Charlie", datetime(2024, 2, 15), "https://reddit.com/post2", "Contenu Reddit 2", "art", 45)
     ]
 
     for doc in docs:
-        print(f"{doc.getType()} - {doc}")
+        print(f"Type de document : {doc.getType()} - Titre du document : {doc.titre}")

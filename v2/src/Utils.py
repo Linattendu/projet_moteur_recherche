@@ -2,9 +2,17 @@
 import re
 import unicodedata
 import string
-
+import os
+import pickle
 
 class Utils:
+    
+    @staticmethod
+    def decouper_en_phrases(texte):
+        """Découper les discours en phrases."""
+        return re.findall(r"[^.]+(?:\.(?:\s|\n))?", texte)
+
+    
     @staticmethod
     def nettoyer_texte(texte):
         """
@@ -39,15 +47,14 @@ class Utils:
         texte = re.sub(r"[\.,’]", "", texte)  # Retirer points et virgules
         return texte
         """
-        
+    
     @staticmethod
     def concatener_textes(corpus):
         texte_brut = ' '.join(doc.texte for doc in corpus.id2doc.values())
         texte_nettoye = Utils.nettoyer_texte(texte_brut)
         print("✅ Texte concaténé et nettoyé.")
         return texte_nettoye
-
-
+    
     @staticmethod
     def dictionnaire_vocab(corpus):
         """
@@ -60,12 +67,39 @@ class Utils:
         vocabulaire = {}
         for doc in corpus.id2doc.values():
             texte = Utils.nettoyer_texte(doc.texte)
-            mots = texte.lower().split()
+            mots = doc.texte.lower().split()
             for mot in mots:
                 if mot not in vocabulaire:
                     vocabulaire[mot] = index
                     index += 1
         return vocabulaire
     
+   
+    
+    @staticmethod
+    def load(path):
+        """
+        @brief Charge un corpus à partir d'un fichier pickle.
+        @param path Chemin du fichier de sauvegarde.
+        @return Instance de Corpus chargée.
+        """
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+    
+     
+    @staticmethod
+    def extraire_extrait(texte, mot_cle, taille_contexte=10):
+        # Nettoyer le texte pour éviter les problèmes de casse
+        mots = texte.lower().split()
+        mot_cle = mot_cle.lower()
 
+        # Expression régulière pour capturer le mot-clé avec 10 mots avant et après
+        pattern = r'(\b\w+\b\s*){0,' + str(15) + r'}' + re.escape(mot_cle) + r'(\s*\b\w+\b){0,' + str(15) + r'}'
+        
+        matches = re.finditer(pattern, texte, re.MULTILINE)
+        
+        for matchNum, match in enumerate(matches, start=1):
+            if match:
+                return match.group()  # Retourne l'extrait complet (mot-clé + contexte)
+        return "Extrait non disponible"
     
