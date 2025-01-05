@@ -42,6 +42,5 @@ dist/
 .project
 .classpath
 .settings/
-
-.Identifier
+.Identifier/
   
