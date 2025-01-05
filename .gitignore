@@ -1,7 +1,7 @@
 # Versions et environnements
 /v1/
-/v3/
-!v2/** # inclure v2
+/v2/
+!v3/** # inclure v3
 !data/**
 /venv/
 .vscode/
@@ -31,8 +31,8 @@ htmlcov/
 
 # Build et distribution
 docs/_build/v1/
-docs/_build/v3/
-!docs/_build/v2/**
+docs/_build/v2/
+!docs/_build/v3/**
 build/
 dist/
 *.egg-info/

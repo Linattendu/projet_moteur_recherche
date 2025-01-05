@@ -1,0 +1,14 @@
+praw
+arxiv
+xmltodict
+pandas
+pytest
+scipy
+python-dotenv
+matplotlib
+wordcloud
+streamlit-toggle-switch
+
+# Doxygen n'est pas téléchargeable avec PIP
+# sudo apt install doxygen
+
