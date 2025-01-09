@@ -46,17 +46,7 @@ URL_ARXIV = "http://export.arxiv.org/api/query?"
 URL de base pour interroger l'API Arxiv.
 """
 
-# Sauvegarde du DataFrame en CSV avec tabulation
-CSV_PATH = 'v1/data/documents.csv'
-
-
 CSV_DISCOURS_PATH = "../data/discours_US.csv"
 
-DATA_DIR =  "../data_discours"  # cas de interface_basique.py
+DATA_DIR =  "../DataPkl_test"   # cas de interface_basique.py
 # DATA_DIR = "../DataPkl" cas de interface_finale.py (ou interface.py)
-
-STOP_WORDS = set([
-    "the", "and", "of", "to", "in", "that", "is", "on", "with", "for", "as", 
-    "was", "at", "by", "it", "from", "an", "or", "which", "but", "be", "were", 
-    "this", "are", "can", "not", "have", "has", "you", "we", "their"
-])

@@ -40,7 +40,7 @@ class Corpus:
         self.ndoc += 1
 
         # Gérer l'auteur
-        auteur_nom = doc.auteur
+        auteur_nom = doc.auteur.lower()
         if auteur_nom not in self.authors:
             self.authors[auteur_nom] = Author(auteur_nom)
             self.naut += 1
@@ -161,7 +161,7 @@ class Corpus:
         @brief Retourne une représentation textuelle du corpus.
         @return Chaîne représentant le corpus (nom, nombre de documents et auteurs).
         """
-        return f"Nom du corpus: {self.nom_corpus} - {self.ndoc} documents, {self.naut} auteurs , Texte : {self.texte_concatene}"
+        return f"Nom du corpus: {self.nom_corpus} - {self.ndoc} documents, {self.naut} auteurs , Theme : {self.theme}"
 
     def save(self, path):
         """

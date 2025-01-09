@@ -1,3 +1,4 @@
+# MatriceDocument.pt
 import numpy as np
 from scipy.sparse import csr_matrix
 from collections import defaultdict
@@ -18,54 +19,51 @@ class MatriceDocuments:
         @param corpus Instance de la classe Corpus.
         """
         self.corpus = corpus
-        self.mat_TF = None  # Matrice TF (sparse)
-        self.mat_TFxIDF = None  # Matrice TFxIDF (sparse)
-        self.frequence_mot = defaultdict(int)  # Fréquence des mots dans les documents
-        self.vocab = {}  # Vocabulaire {mot : {id, freq, len}}
-        self.chemin_vocab = os.path.join(DATA_DIR, f"vocab_{self.corpus.nom_corpus}.pkl")
-        
-        # Chargement du vocabulaire si existant
-        if os.path.exists(self.chemin_vocab):
-            self.vocab = Utils.load(self.chemin_vocab)
-            print(f"📂 Vocabulaire chargé ({len(self.vocab)} mots) pour {self.corpus.nom_corpus}.")
-
-
-    # ========================================
-    # 🔧 CONSTRUCTION DU VOCABULAIRE + MATRICE TF
-    # ========================================
+        self.mat_TF = None
+        self.mat_TFxIDF = None
+        self.vocab =  {} # Vocabulaire {mot : {id, freq, len}}
+        self.frequence_mot= defaultdict(int)   # Fréquence des mots dans les documents     
+        self.construire_vocab_et_matrice_TF()
+        self.construire_matrice_TFxIDF()
+   
     def construire_vocab_et_matrice_TF(self):
         """
         Construit simultanément le vocabulaire et la matrice TF.
+        @return matrice Tf , vocab
+        
         """
         rows, cols, data = [], [], []
         index = 0  # Identifiant unique des mots
 
         # Parcourir chaque document du corpus
         for doc_id, doc in enumerate(self.corpus.id2doc.values()):
+            #print(doc)
             texte = Utils.nettoyer_texte(doc.texte)
             mots = texte.lower().split()
             compteur = defaultdict(int)
+            #print("mots : ", mots)
 
             # Construire le vocabulaire et remplir la matrice TF
             for mot in mots:
                 
                 if mot not in self.vocab:
                     self.vocab[mot] = {
-                        'id': index,
-                        'freq': 0,
-                        'len': len(mot)  # Ajouter la longueur du mot
+                    'id': index,
+                    'freq': 0,
+                    'len': len(mot)  # Ajouter la longueur du mot
                     }
                     index += 1
                 
                 # Compter les occurrences par document
                 compteur[mot] += 1
+            #print("compteur mots : ", compteur)
             
             # Remplir la matrice TF
             for mot, count in compteur.items():
                 rows.append(doc_id)
                 cols.append(self.vocab[mot]['id'])
                 data.append(count)
-                
+                #print("frequence mot : ", self.frequence_mot)
                 # Mise à jour de la fréquence globale (document frequency)
                 self.frequence_mot[mot] += 1
                 self.vocab[mot]['freq'] += count  # Total occurrences dans tout le corpus
@@ -74,22 +72,21 @@ class MatriceDocuments:
         self.mat_TF = csr_matrix((data, (rows, cols)), shape=(len(self.corpus.id2doc), len(self.vocab)))
 
         # Sauvegarder le vocabulaire
-        with open(self.chemin_vocab, 'wb') as f:
+        """ with open(self.chemin_vocab, 'wb') as f:
             pickle.dump(self.vocab, f)
-        print(f"✅ Matrice TF construite et vocab sauvegardé ({len(self.vocab)} mots).")
+        print(f"Matrice TF construite et vocab sauvegardé ({len(self.vocab)} mots).") """
         
-        return self.mat_TF
+        
 
 
-    # ========================================
-    # 🔧 CONSTRUCTION DE LA MATRICE TFxIDF
-    # ========================================
-    def construire_matrice_TFxIDF(self):
+    # CONSTRUCTION DE LA MATRICE TFxIDF
+
+    def construire_matrice_TFxIDF(self ):
         """
         Construit la matrice TFxIDF à partir de la matrice TF existante.
         """
         if self.mat_TF is None:
-            raise ValueError("🚨 La matrice TF doit être construite avant TFxIDF.")
+            raise ValueError("La matrice TF doit être construite avant TFxIDF.")
 
         n_docs = len(self.corpus.id2doc)
 
@@ -104,45 +101,18 @@ class MatriceDocuments:
         # Multiplication de la matrice TF par IDF
         self.mat_TFxIDF = self.mat_TF.multiply(idf)
 
-        print(f"✅ Matrice TFxIDF construite (taille : {self.mat_TFxIDF.shape}).")
-        return self.mat_TFxIDF
-
-
-    # ========================================
-    # 🔍 TRANSFORMATION DE REQUÊTE EN VECTEUR
-    # ========================================
-    def vecteur_aligne_matrice(self, mots_cles):
-        """
-        Transforme une requête utilisateur en vecteur aligné avec la matrice TFxIDF.
-        """
-        vecteur_requete = np.zeros(len(self.vocab))
-        mots = mots_cles.lower().split()
-
-        for mot in mots:
-            if mot in self.vocab:
-                vecteur_requete[self.vocab[mot]['id']] += 1
-            else:
-                print(f"⚠️ Mot absent du vocabulaire : {mot}")
+        print(f"Matrice TFxIDF construite (taille : {self.mat_TFxIDF.shape}).")
         
-        # Appliquer l'IDF pour chaque mot
-        for mot in mots:
-            if mot in self.vocab:
-                idf = np.log((len(self.corpus.id2doc) + 1) / (1 + self.frequence_mot[mot])) + 1
-                vecteur_requete[self.vocab[mot]['id']] *= idf
-
-        return vecteur_requete
-
-
-    # ========================================
-    # 🔄 AFFICHER MATRICE (DEBUG)
-    # ========================================
+ 
+    # AFFICHER MATRICE (DEBUG)
+ 
     def afficher_matrice(self):
         """
         Affiche les matrices TF et TFxIDF pour débogage.
         """
         if self.mat_TF is not None:
-            print("🟩 Matrice TF :")
+            print("Matrice TF :")
             print(self.mat_TF.toarray())
         if self.mat_TFxIDF is not None:
-            print("\n🟩 Matrice TFxIDF :")
+            print("\nMatrice TFxIDF :")
             print(self.mat_TFxIDF.toarray())
