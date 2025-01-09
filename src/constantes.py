@@ -47,7 +47,7 @@ URL de base pour interroger l'API Arxiv.
 """
 
 # Sauvegarde du DataFrame en CSV avec tabulation
-CSV_PATH = 'v1/data/documents.csv'
+CSV_PATH = 'data/documents.csv'
 
-#
-DATA_DIR = '../data_v2'
+
+DATA_DIR = './data_v2'
