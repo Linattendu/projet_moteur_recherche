@@ -9,6 +9,7 @@ matplotlib
 wordcloud
 streamlit-toggle-switch
 
+
 # Doxygen n'est pas téléchargeable avec PIP
 # sudo apt install doxygen
 

@@ -12,8 +12,8 @@ from src.Utils import Utils
 from src.Document import Document
 from datetime import datetime
 
-DATA_DIR_DISCOURS = "../data_discours"
-DATA_DIR_PKL = "../DataPkl_test"
+DATA_DIR_DISCOURS = "./data_discours"
+DATA_DIR_PKL = "./DataPkl"
 CSV_DISCOURS_PATH = os.path.join(DATA_DIR_DISCOURS, "discours_US.csv")
 load_dotenv()
 
@@ -30,7 +30,7 @@ theme_csv = "discours"
 class CorpusMatrixManager:
 
     def __init__(self):
-        self.DB_PATH = "../db/corpus_matrix.sqlite"
+        self.DB_PATH = "./db/corpus_matrix.sqlite"
         self.conn = sqlite3.connect(self.DB_PATH)
         self.cursor = self.conn.cursor()
         self.creer_table()

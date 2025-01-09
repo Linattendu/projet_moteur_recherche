@@ -3,7 +3,7 @@ name: Documentation
 on:
   push:
     branches:
-      - v2
+      - v3
 
 jobs:
   generate-docs:
@@ -20,13 +20,13 @@ jobs:
       run: sudo apt-get install graphviz -y
 
     # Génération de la documentation pour la version 1
-    - name: Generate Documentation for v1
+    - name: Generate Documentation for v3
       run: |
-        mkdir -p docs/_build/v1
+        mkdir -p docs/_build/
         doxygen Doxyfile.conf
 
     # Génération de la documentation pour la version 2
-    - name: Generate Documentation for v2
+    - name: Generate Documentation for v3
       run: |
-        mkdir -p docs/_build/v2
-        doxygen Doxyfile_v2.conf
+        mkdir -p docs/_build/v3
+        doxygen Doxyfile_v3.conf

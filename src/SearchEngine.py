@@ -128,7 +128,7 @@ class SearchEngine:
 
     # CHARGER OU CONSTRUIRE LES MATRICES
     def _charger_matrices_depuis_db(self,nom_corpus):
-        conn = sqlite3.connect("../db/corpus_matrix.sqlite")
+        conn = sqlite3.connect("./db/corpus_matrix.sqlite")
         cursor = conn.cursor()
         cursor.execute('''
             SELECT corpus_pkl, matrice_TF_pkl, matrice_TFxIDF_pkl, vocab_pkl, frequence_mots_pkl
