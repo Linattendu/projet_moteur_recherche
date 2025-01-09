@@ -9,7 +9,7 @@
 vscode/
 archives/
 .env
-
+.git
 # Caches et compilations
 .pytest_cache/
 v1/src/__pycache__/
