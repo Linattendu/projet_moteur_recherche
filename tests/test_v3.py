@@ -5,6 +5,8 @@ from src.analyse_discours import ThemeClassifier
 from src.Corpus import Corpus
 from src.Document import Document
 from datetime import datetime
+from scipy.sparse import csr_matrix
+from datetime import datetime
 
 def test_creer_corpus_discours():
     manager = CorpusMatrixManager()
@@ -29,15 +31,12 @@ def test_search_with_database():
     for _, row in resultats.iterrows():
         assert "climate" in row['Extrait'].lower()
 
-from scipy.sparse import csr_matrix
 
 # Convertir les dates des documents
 date1 = datetime.strptime("2021-01-01", "%Y-%m-%d").date()
 date2 = datetime.strptime("2022-01-02", "%Y-%m-%d").date()
 
 
-from scipy.sparse import csr_matrix
-from datetime import datetime
 
 def test_creer_sous_corpus():
     classifier = ThemeClassifier()
