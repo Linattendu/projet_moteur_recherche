@@ -71,6 +71,16 @@ class StreamlitApp:
     def config_interface(self):
         st.set_page_config(layout="wide", page_title="Moteur de Recherche")
         self.inject_css()
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"] {
+                background-color: #262730;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+            )
         st.title("Moteur de Recherche de Corpus")
 
     def filtres(self):

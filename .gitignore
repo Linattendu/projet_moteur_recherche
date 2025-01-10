@@ -12,5 +12,6 @@ __pycache__/
 
 *.log
 *.tmp
+*.Identifier
 
 # Exclure le dossier Git (non nécessaire dans la plupart des cas, car .git est automatiquement ignoré)
