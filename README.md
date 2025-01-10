@@ -36,7 +36,7 @@ Lancer l'application Streamlit :
     
 Ou bien lancer l'interface basique :
    
-    streamlit run app.py
+    streamlit run interface_basique.py
     
 Exécuter le moteur de recherche en ligne de commande :
 
