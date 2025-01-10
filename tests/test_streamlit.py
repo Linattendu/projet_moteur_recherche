@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from interface_basique import main
-from streamlit_app import charger_resultats_corpus_discours, mettre_a_jour_theme_nomCorpus
 import os
 from datetime import date
 
@@ -38,29 +37,12 @@ def test_main_interface_basique():
         main()
 
         # Vérifier les appels Streamlit
-        mock_text_input.assert_called_once_with("🔍 Mots clés", "public college")
-        mock_date_input.assert_any_call("📅 Date début", value=None)
-        mock_date_input.assert_any_call("📅 Date fin", value=None)
+        mock_text_input.assert_called_once_with("Mots clés", "public college")
+        mock_date_input.assert_any_call("Date début", value=None)
+        mock_date_input.assert_any_call("Date fin", value=None)
         mock_selectbox.assert_called_once_with("👤 Filtrer par auteur", ["Tous", "CLINTON", "TRUMP"])
         mock_slider.assert_called_once_with("Nombre d'articles à extraire :", 1, 20, 5)
         mock_button.assert_called_once_with("Rechercher")
         mock_markdown.assert_called()
 
-def test_charger_resultats_corpus_discours(mocker):
-    """Tester le chargement des résultats classifiés."""
-    mocker.patch("streamlit_app.os.path.exists", return_value=True)
-    mock_open = mocker.patch("builtins.open", mocker.mock_open(read_data=b"{}"))
-    mocker.patch("pickle.load", return_value={"politics": []})
 
-    resultats = charger_resultats_corpus_discours()
-    assert isinstance(resultats, dict)
-    assert "politics" in resultats
-
-
-def test_mettre_a_jour_theme_nomCorpus():
-    """Tester la mise à jour du dictionnaire des thèmes."""
-    theme_nomCorpus = {"politics": ["RedditArxivpolitics"]}
-    resultats_classes = {"climatechange": []}
-    updated = mettre_a_jour_theme_nomCorpus(resultats_classes, theme_nomCorpus)
-    assert "climatechange" in updated
-    assert "csvclimatechange" in updated["climatechange"]

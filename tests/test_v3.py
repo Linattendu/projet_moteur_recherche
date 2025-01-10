@@ -1,7 +1,7 @@
 import pytest
 from src.CorpusMatriceManager import CorpusMatriceManager
 from src.SearchEngine import SearchEngine
-from src.ClassificateurThemesDiscours import ThemeClassificateurThemesDiscours
+from src.ClassificateurThemesDiscours import ClassificateurThemesDiscours
 from src.Corpus import Corpus
 from src.Document import Document
 from datetime import datetime
@@ -17,8 +17,8 @@ def test_creer_corpus_discours():
 def test_stocker_en_base_de_donnees():
     manager = CorpusMatriceManager()
     manager.stocker_en_base_de_donnees()
-    # Vérifiez que les matrices TF et TFxIDF sont bien stockées
-    result = manager.cursor.execute("SELECT matrice_TF_pkl, matrice_TFxIDF_pkl FROM corpus WHERE theme='discours'").fetchone()
+    # Vérifiez que les chemins matrices TF et TFxIDF sont bien stockées
+    result = manager.cursor.execute("SELECT chemin_TF, chemin_TFIDF FROM corpus WHERE theme='discours'").fetchone()
     assert result is not None
     assert result[0] is not None  # matrice_TF
     assert result[1] is not None  # matrice_TFxIDF
@@ -39,7 +39,7 @@ date2 = datetime.strptime("2022-01-02", "%Y-%m-%d").date()
 
 
 def test_creer_sous_corpus():
-    classifier = ThemeClassificateurThemesDiscours()
+    classifier = ClassificateurThemesDiscours()
     corpus = Corpus("csvdiscours")
 
     # Ajouter des documents avec le thème "climatechange"

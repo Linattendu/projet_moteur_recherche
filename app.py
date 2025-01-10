@@ -23,50 +23,12 @@ class StreamlitApp:
         with open(file_name) as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     
-    def charger_resultats_corpus_discours(self):
-        """
-        Charge les résultats classifiés depuis la table 'themes_discours' dans la base de données SQLite.
-        Retourne un dictionnaire structuré par thème. 
-        """
-        try:
-            conn = sqlite3.connect(DB_PATH)
-            query = "SELECT theme, chemin_document, score FROM themes_discours"
-            df = pd.read_sql_query(query, conn)
-            conn.close()
-
-            if df.empty:
-                st.warning("La table 'themes_discours' est vide. Exécutez l'analyse d'abord.")
-                return {}
-
-            # Convertir les données en un dictionnaire par thème
-            resultats_par_theme = {}
-            for theme in df['theme'].unique():
-                theme_df = df[df['theme'] == theme]
-                resultats_par_theme[theme] = [
-                    (row['chemin_document'], row['score'])
-                    for _, row in theme_df.iterrows()
-                ]
-            return resultats_par_theme
-        except Exception as e:
-            st.error(f"Erreur lors du chargement des données depuis la table 'themes_discours' : {e}")
-            return {}
-
-
     def charger_document_par_chemin(self, chemin_document):
         """
         Charge un document pickle à partir de son chemin.
         """
         with open(chemin_document, 'rb') as f:
             return pickle.load(f)
-    
-    def mettre_a_jour_theme_nomCorpus(self):
-        for theme, documents in self.resultats_corpus_discours.items():
-            corpus_csv = f"csv{theme}"
-            if theme in THEMESCORPUS:
-                if corpus_csv not in THEMESCORPUS[theme]:
-                    THEMESCORPUS[theme].append(corpus_csv)
-            else:
-                THEMESCORPUS[theme] = [f"RedditArxiv{theme}", corpus_csv]
 
     def config_interface(self):
         st.set_page_config(layout="wide", page_title="Moteur de Recherche")
@@ -354,7 +316,6 @@ class StreamlitApp:
         mot_cle, themes_selectionnes, date_debut, date_fin, auteur, sources, nombre_docs, choix_recherche = self.filtres()
         if any(choix_recherche.values()) and mot_cle:
             
-            #self.mettre_a_jour_theme_nomCorpus()
             self.resultats_corpus(mot_cle, themes_selectionnes, sources, nombre_docs, auteur, date_debut, date_fin)
             self.afficher_resultats(choix_recherche, mot_cle, auteur,date_debut,date_fin)
 
