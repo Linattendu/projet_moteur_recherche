@@ -3,7 +3,7 @@
 # Project settings
 PROJECT_NAME           = "Projet Moteur De Recherche"
 PROJECT_NUMBER         = "v3"
-OUTPUT_DIRECTORY       = "docs"
+OUTPUT_DIRECTORY       = "docs/html"
 INPUT                  = "./src"
 RECURSIVE              = YES
 
