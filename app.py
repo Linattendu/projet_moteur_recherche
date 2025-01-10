@@ -311,8 +311,7 @@ class StreamlitApp:
 
     def executer(self):
         self.config_interface()
-        self.resultats_corpus_discours = self.charger_resultats_corpus_discours()
-        print("self.resultats_corpus_discours ", self.resultats_corpus_discours)
+ 
         mot_cle, themes_selectionnes, date_debut, date_fin, auteur, sources, nombre_docs, choix_recherche = self.filtres()
         if any(choix_recherche.values()) and mot_cle:
             

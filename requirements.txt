@@ -8,6 +8,9 @@ python-dotenv
 matplotlib
 wordcloud
 streamlit-toggle-switch
+mock
+numpy
+
 
 # Doxygen n'est pas téléchargeable avec PIP
 # sudo apt install doxygen
