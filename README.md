@@ -1,10 +1,10 @@
 # Projet : Moteur de Recherche
 
-### Version 3 : Recherche Avancée et Documentation
+### Branche Stable -  Version 3 : Recherche Avancée et Documentation
 
 ## Description
 
-La version 3 représente une étape avancée du projet, comprenant les fonctionnalités de recherche enrichies, une interface utilisateur plus aboutie, et une documentation détaillée. Elle correspond aux TDs 3 à 10 et inclut la génération automatique de matrices TF-IDF et des tests automatisés.
+La branche main correspond à la version stable de l'application, intégrant toutes les fonctionnalités développées jusqu'aux TDs 3 à 10. Cette version comprend des fonctionnalités de recherche avancées, une interface utilisateur performante, et une documentation détaillée.
 
 ## Fonctionnalités
 
