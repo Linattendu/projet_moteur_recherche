@@ -10,6 +10,7 @@ wordcloud
 streamlit-toggle-switch
 mock
 numpy
+tqdm
 
 
 # Doxygen n'est pas téléchargeable avec PIP
