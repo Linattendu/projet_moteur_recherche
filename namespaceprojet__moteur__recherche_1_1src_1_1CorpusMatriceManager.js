@@ -1,0 +1,4 @@
+var namespaceprojet__moteur__recherche_1_1src_1_1CorpusMatriceManager =
+[
+    [ "CorpusMatriceManager", "classprojet__moteur__recherche_1_1src_1_1CorpusMatriceManager_1_1CorpusMatriceManager.html", "classprojet__moteur__recherche_1_1src_1_1CorpusMatriceManager_1_1CorpusMatriceManager" ]
+];
