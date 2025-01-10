@@ -30,14 +30,6 @@ Cette version **v2** correspond aux fonctionnalités développées dans les TDs 
     
 3. **Utilisation :**
 
-Lancer l'application Streamlit :
-
-    streamlit run app.py
-    
-Ou bien lancer l'interface basique :
-   
-    streamlit run interface_basique.py
-    
 Exécuter le moteur de recherche en ligne de commande :
 
    ```bash
