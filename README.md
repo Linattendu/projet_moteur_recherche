@@ -14,14 +14,6 @@ Cette version **v2** correspond aux fonctionnalités développées dans les TDs 
 
 ### Moteur de Recherche :
 - Recherche par mots-clés avec gestion des expressions exactes.
-- Extraction des passages pertinents contenant les mots recherchés.
-- Filtrage des résultats par auteur et période (date de début et de fin).
-- Classement des documents en fonction des scores pertinents (TF-IDF).
-
-### Visualisation et Analyse :
-- Nuages de mots pour visualiser les thèmes dominants.
-- Graphiques d'évolution temporelle des termes recherchés.
-- Comparaison des résultats entre différentes sources (Reddit, ArXiv, CSV).
 
 ## Installation
 
@@ -36,21 +28,30 @@ Cette version **v2** correspond aux fonctionnalités développées dans les TDs 
     source venv/bin/activate  # Sur Linux/Mac ou sur Windows: venv\Scripts\activate   
     pip install -r requirements.txt
     
-3. **Utilisation **
+3. **Utilisation :**
+
 Lancer l'application Streamlit :
-    ```bash
-    Copier le code
+
     streamlit run app.py
     
-Vous pouvez accéder à l'interface utilisateur via un navigateur web.
-
+Ou bien lancer l'interface basique :
+   
+    streamlit run app.py
+    
 Exécuter le moteur de recherche en ligne de commande :
 
-bash
-Copier le code
-python -m src.SearchEngine
+   ```bash
+   python -m src.SearchEngine
+   ```
+
 Exécuter les tests unitaires :
 
-bash
-Copier le code
-python -m pytest tests/
+   ```bash
+   python -m pytest tests/
+   ```
+
+## Auteurs
+
+Binôme : Paul PONCET et Lina RHIM
+
+Encadrants : Julien VELCIN et Francesco AMATO
