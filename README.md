@@ -34,6 +34,7 @@ La branche main correspond à la version stable de l'application, intégrant tou
   - Couverture des modules de gestion de corpus, moteur de recherche, et extraction des données.
 - **Documentation technique :**
   - Documentation générée automatiquement avec Doxygen.
+  - Vous trouverez la documentation générée par Doxygen dans la branche gh-pages.
   - Instructions claires pour les développeurs.
 
 ## Installation
