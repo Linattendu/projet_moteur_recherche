@@ -1,0 +1,90 @@
+body, .stApp {
+    background-color: ##202225!important;  /* Sombre */
+    color: #ff3131 !important;             /* Texte clair */
+    font-family: "sans-serif";             /* Au choix */
+}
+
+/* ======================
+   CACHER LE MENU / HEADER
+   ====================== */
+   #MainMenu, header {
+    visibility: hidden;
+    height: 0;
+}
+
+header[data-testid="stHeader"] {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+/* ======================
+   BARRE LATÉRALE
+   ====================== */
+aside[data-testid="stSidebar"] {
+    padding-top: 0rem !important;
+    margin-top: 0 !important;
+    width: 18rem !important;
+}
+
+/* ======================
+   ZONE PRINCIPALE
+   ====================== */
+.block-container {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* ======================
+   TITRES GLOBAUX
+   ====================== */
+h3 {
+    margin: 0 0 0.5rem 0 !important; /* marge standard globale */
+}
+
+/* Titre "my-sidebar-title" dans la sidebar */
+h3.my-sidebar-title {
+    color: #CBD3E3 !important;
+    font-family: "Helvetica", sans-serif;
+    font-size: 1.8rem !important;
+    text-align: center !important;
+    margin-bottom: 1rem !important; /* si besoin */
+    margin-top: 0rem !important;    /* pour coller en haut */
+}
+
+/* ======================
+   .comp-title (pour "Comparaison entre corpus", etc.)
+   ====================== */
+.comp-title {
+    font-size: 1.5rem !important;
+    color: #CBD3E3 !important;
+    line-height: 1.2 !important;
+    margin-top: 0rem !important;
+}
+
+/* Si vous avez un besoin particulier pour comp-corpus-row vs analyse-textuelle-row,
+   vous pouvez surcharger .comp-title, ex. : */
+.comp-corpus-row h3.comp-title {
+    margin-top: 0rem !important; /* exemple différent */
+}
+
+/* ======================
+   CHECKBOXES
+   ====================== */
+.stCheckbox input[type="checkbox"] {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    border-color: #6f6b66 !important;
+    background-color: #6f6b66!important;
+    accent-color: orange !important;
+}
+
+.stMultiSelect, .stSelectbox {
+
+    margin-top: -1.5rem !important; /* exemple différent */
+}
+
+.stMultiSelect label, .stSelectbox label {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    display: inline-block;
+}
