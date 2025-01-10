@@ -62,13 +62,23 @@ Lancer l'application Streamlit
 streamlit run app.py
 ```
 
+Lancer l'application Streamlit de l'interface basique
+```bash
+streamlit run interface_basique.py
+```
+
 Exécuter les tests
 ```bash
 python -m pytest tests/
 ```
-Générer la documentation
+
+Générer la documentation en local ( celle-ci est automatisé avec github Actions)
 ```bash
 doxygen Doxyfile # La documentation HTML sera disponible dans le dossier `docs/html/index.html`
 ```
 
+## Auteurs
 
+Binôme : Paul PONCET et Lina RHIM
+
+Encadrants : Julien VELCIN et Francesco AMATO
