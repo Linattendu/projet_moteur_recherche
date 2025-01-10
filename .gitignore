@@ -1,7 +1,16 @@
-/venv
-.git
-/venv/
-/venv/*.*
-venv
-.git/
-.git/*.*
+# Ignorer les environnements virtuels
+venv/
+venv/*
+
+# Ignorer les fichiers compilés Python
+*.pyc
+__pycache__/
+
+# Exclure des configurations spécifiques
+.idea/
+.vscode/
+
+*.log
+*.tmp
+
+# Exclure le dossier Git (non nécessaire dans la plupart des cas, car .git est automatiquement ignoré)
