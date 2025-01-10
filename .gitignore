@@ -2,8 +2,14 @@
 /v1/
 /v2/
 #!v3/** # inclure v3
-!data/**
 /venv/
+venv
+venv/*.*
+
+/venv/*.*
+
+/venv
+
 .vscode/
 vscode/
 archives/
