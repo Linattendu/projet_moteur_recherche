@@ -27,5 +27,31 @@ Cette version `v1` constitue le socle de base de l'application, correspondant au
 
 1. **Cloner le dépôt :**
    ```bash
-   git clone https://github.com/projet_moteur_recherche
+   git clone https://github.com/Linattendu/projet_moteur_recherche.git
    cd projet_moteur_recherche
+   ```
+2. **Créer un environnement virtuel et installer les dépendances :**
+
+  ```bash
+  python -m venv venv
+  source venv/bin/activate  # sur linux ; sur Windows : venv\Scripts\activate
+  pip install -r requirements.txt
+  ```
+
+5. **Utilisation**
+Lancer le code :
+  ```bash
+  python -m src.Author
+  ect...
+  ```
+
+6. Exécuter les tests :
+
+```bash
+python -m pytest tests/
+```
+
+## Auteurs
+Binôme : PONCET Paul et RHIM Lina
+
+Encadrants : Julien Velcin et Francesco Amato
