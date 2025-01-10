@@ -8,18 +8,13 @@ import time
 from src.constantes import *
 
 
-# ============================================
+
 # CONFIGURATION
-# ============================================
-
-
 nom_corpus = 'csvdiscours'
 
 load_dotenv()
 
-# ============================================
 # INTERFACE STREAMLIT
-# ============================================
 def main():
     # === CSS pour espacement ===
     st.markdown(
@@ -51,14 +46,14 @@ def main():
     st.markdown('<div class="title"><h1> Moteur de Recherche de Discours</h1></div>', unsafe_allow_html=True)
 
     # Barre de recherche: Saisie des mots-clés et nombre de résultats
-    mot_cle = st.text_input("🔍 Mots clés", "public college")
+    mot_cle = st.text_input("Mots clés", "public college")
     
     # Filtre par date (plage de dates)
     col1, col2 = st.columns(2)
     with col1:
-        date_debut = st.date_input("📅 Date début", value=None)
+        date_debut = st.date_input("Date début", value=None)
     with col2:
-        date_fin = st.date_input("📅 Date fin", value=None)
+        date_fin = st.date_input("Date fin", value=None)
 
     print("date_debut ",date_debut)
     # Filtre par auteur
@@ -84,7 +79,7 @@ def main():
             )
         
         fin = time.time()
-        print(f"🔍 Temps de recherche : {fin - debut:.3f} secondes")
+        print(f"Temps de recherche : {fin - debut:.3f} secondes")
 
         if not resultats.empty:
             for index, row in resultats.iterrows():

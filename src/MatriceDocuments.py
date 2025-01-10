@@ -94,7 +94,7 @@ class MatriceDocuments:
         idf = np.log((n_docs + 1) / (np.array([self.frequence_mot[mot] for mot in self.vocab]) + 1)) + 1
         
         if self.mat_TF.shape[1] != len(idf):
-            print("🚨 Incohérence entre la matrice TF et la taille du vocabulaire.")
+            print("Incohérence entre la matrice TF et la taille du vocabulaire.")
             self.construire_vocab_et_matrice_TF()  # Reconstruire la matrice TF
             return self.construire_matrice_TFxIDF()
 

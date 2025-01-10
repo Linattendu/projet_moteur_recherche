@@ -8,10 +8,9 @@ from collections import defaultdict
 from src.Corpus import Corpus
 from src.Utils import Utils
 from datetime import datetime
+from src.constantes import *
 
 class SearchEngine:
-    DB_PATH = "../db/corpus_matrix1.sqlite"
-    BASE_DIR = "../DataPkl/"
 
     def __init__(self, nom_corpus):
         self.nom_corpus = nom_corpus
@@ -50,7 +49,7 @@ class SearchEngine:
         """
         Récupère les chemins des fichiers liés au corpus depuis la base de données.
         """
-        conn = sqlite3.connect(self.DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         cursor.execute('''
             SELECT 

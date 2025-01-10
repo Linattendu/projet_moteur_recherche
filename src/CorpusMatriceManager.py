@@ -107,9 +107,9 @@ class CorpusMatriceManager:
             corpus = CorpusSingleton(nom_corpus, theme)
 
             reddit_scraper = RedditScrap(corpus, erreur)
-            reddit_scraper.recuperer_posts(theme, limit=30)
+            reddit_scraper.recuperer_posts(theme, limit=50)
             arxiv_scraper = ArxivScrap(corpus, erreur)
-            arxiv_scraper.recuperer_articles(theme, max_results=30)
+            arxiv_scraper.recuperer_articles(theme, max_results=50)
 
             self._sauvegarder_pkl(corpus, nom_fichier_corpus)
             self._construire_matrices(nom_corpus)

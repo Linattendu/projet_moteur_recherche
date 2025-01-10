@@ -46,13 +46,12 @@ URL_ARXIV = "http://export.arxiv.org/api/query?"
 URL de base pour interroger l'API Arxiv.
 """
 
-CSV_DISCOURS_PATH = "../data_discours/discours_US.csv"
-CSV_DISCOURS_CLASSIFIE_PATH = "../discours_classifie"
-DATA_DIR_PKL = "../DataPkl1"
+CSV_DISCOURS_PATH = "./data_discours/discours_US.csv"
+CSV_DISCOURS_CLASSIFIE_PATH = "./discours_classifie"
 
-DATA_DIR =  "../DataPkl"   
+DATA_DIR_PKL=  "./DataPkl"   
 
-DB_PATH = "../db/corpus_matrix1.sqlite"
+DB_PATH = "./db/corpus_matrix.sqlite"
 
 THEMESCORPUS = {
             "politics": ["RedditArxivpolitics", "csvdiscours"],
