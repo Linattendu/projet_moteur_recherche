@@ -15,7 +15,7 @@ class MatriceDocuments:
 
     def __init__(self, corpus):
         """
-        Initialise la classe avec un corpus de documents.
+        @brief Initialise la classe avec un corpus de documents.
         @param corpus Instance de la classe Corpus.
         """
         self.corpus = corpus
@@ -28,7 +28,7 @@ class MatriceDocuments:
    
     def construire_vocab_et_matrice_TF(self):
         """
-        Construit simultanément le vocabulaire et la matrice TF.
+        @brief Construit simultanément le vocabulaire et la matrice TF.
         @return matrice Tf , vocab
         
         """
@@ -37,11 +37,9 @@ class MatriceDocuments:
 
         # Parcourir chaque document du corpus
         for doc_id, doc in enumerate(self.corpus.id2doc.values()):
-            #print(doc)
             texte = Utils.nettoyer_texte(doc.texte)
             mots = texte.lower().split()
             compteur = defaultdict(int)
-            #print("mots : ", mots)
 
             # Construire le vocabulaire et remplir la matrice TF
             for mot in mots:
@@ -56,14 +54,12 @@ class MatriceDocuments:
                 
                 # Compter les occurrences par document
                 compteur[mot] += 1
-            #print("compteur mots : ", compteur)
             
             # Remplir la matrice TF
             for mot, count in compteur.items():
                 rows.append(doc_id)
                 cols.append(self.vocab[mot]['id'])
                 data.append(count)
-                #print("frequence mot : ", self.frequence_mot)
                 # Mise à jour de la fréquence globale (document frequency)
                 self.frequence_mot[mot] += 1
                 self.vocab[mot]['freq'] += count  # Total occurrences dans tout le corpus
@@ -71,19 +67,18 @@ class MatriceDocuments:
         # Créer la matrice creuse (sparse matrix)
         self.mat_TF = csr_matrix((data, (rows, cols)), shape=(len(self.corpus.id2doc), len(self.vocab)))
 
-        # Sauvegarder le vocabulaire
-        """ with open(self.chemin_vocab, 'wb') as f:
-            pickle.dump(self.vocab, f)
-        print(f"Matrice TF construite et vocab sauvegardé ({len(self.vocab)} mots).") """
-        
-        
-
 
     # CONSTRUCTION DE LA MATRICE TFxIDF
 
-    def construire_matrice_TFxIDF(self ):
+    def construire_matrice_TFxIDF(self):
         """
-        Construit la matrice TFxIDF à partir de la matrice TF existante.
+        @brief Construit la matrice TFxIDF à partir de la matrice TF existante.
+        @details 
+        - La matrice TFxIDF est obtenue en multipliant chaque terme de la matrice TF par son IDF.
+        - L'IDF est calculé comme \f$ \log\left(\frac{N+1}{\text{fréquence} + 1}\right) + 1 \f$, où \( N \) est le nombre total de documents.
+
+        @throws ValueError Si la matrice TF n'est pas construite.
+        @note Reconstruit la matrice TF et le vocabulaire en cas d'incohérence.
         """
         if self.mat_TF is None:
             raise ValueError("La matrice TF doit être construite avant TFxIDF.")
@@ -108,7 +103,7 @@ class MatriceDocuments:
  
     def afficher_matrice(self):
         """
-        Affiche les matrices TF et TFxIDF pour débogage.
+        @brief Affiche les matrices TF et TFxIDF pour débogage.
         """
         if self.mat_TF is not None:
             print("Matrice TF :")

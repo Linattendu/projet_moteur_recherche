@@ -1,0 +1,31 @@
+name: Doxygen Documentation
+
+on:
+  push:
+    branches:
+      - v3
+  pull_request:
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Install Doxygen
+      - name: Install Doxygen
+        run: sudo apt-get install -y doxygen
+
+      # Generate Doxygen documentation
+      - name: Generate Doxygen Documentation
+        run: doxygen Doxyfile
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/html

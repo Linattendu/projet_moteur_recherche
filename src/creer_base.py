@@ -1,6 +1,14 @@
 from src.CorpusMatriceManager import CorpusMatriceManager
 
 def main():
+    """
+    @brief Point d'entrée principal de l'application pour gérer les corpus.
+    
+    @details 
+    - Lance la création des corpus de discours à partir de fichiers CSV.
+    - Récupère les données Reddit et Arxiv pour différents thèmes.
+    - Propose de stocker les informations des fichiers pickle (PKL) dans la base de données.
+    """
     manager = CorpusMatriceManager()
 
     print("Lancement du processus de création des corpus...")
@@ -19,4 +27,7 @@ def main():
     manager.fermer_connexion()
 
 if __name__ == "__main__":
+    """
+    @brief Exécute la fonction principale `main` si le script est lancé directement.
+    """
     main()

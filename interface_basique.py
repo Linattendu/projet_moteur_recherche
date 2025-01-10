@@ -16,6 +16,13 @@ load_dotenv()
 
 # INTERFACE STREAMLIT
 def main():
+    """
+    @brief Interface principale du moteur de recherche de discours.
+
+    @details
+    Permet de rechercher des discours avec des filtres : mot-clé, date, auteur, et nombre de résultats.
+    Affiche les résultats avec titre, extrait, auteur, score, et lien.
+    """
     # === CSS pour espacement ===
     st.markdown(
         """
@@ -47,7 +54,7 @@ def main():
 
     # Barre de recherche: Saisie des mots-clés et nombre de résultats
     mot_cle = st.text_input("Mots clés", "public college")
-    
+
     # Filtre par date (plage de dates)
     col1, col2 = st.columns(2)
     with col1:

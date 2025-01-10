@@ -13,24 +13,39 @@ import base64
 from src.constantes import *
 
 class StreamlitApp:
+    """
+    @class StreamlitApp
+    @brief Application principale pour l'interface Streamlit.
+    """
 
     def __init__(self):
-        
+        """
+        @brief Initialise l'application avec des structures de données.
+        """
         self.resultats_par_corpus = {}
         self.resultats_corpus_discours = {}
 
     def inject_css(self, file_name="streamlit_style.css"):
+        """
+        @brief Injecte un fichier CSS dans l'interface.
+        @param file_name Nom du fichier CSS.
+        """
         with open(file_name) as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     
     def charger_document_par_chemin(self, chemin_document):
         """
-        Charge un document pickle à partir de son chemin.
+        @brief Charge un document pickle depuis un chemin.
+        @param chemin_document Chemin du fichier pickle.
+        @return Document chargé.
         """
         with open(chemin_document, 'rb') as f:
             return pickle.load(f)
 
     def config_interface(self):
+        """
+        @brief Configure l'interface utilisateur (layout, styles, titre).
+        """
         st.set_page_config(layout="wide", page_title="Moteur de Recherche")
         self.inject_css()
         st.markdown(
@@ -42,10 +57,14 @@ class StreamlitApp:
             </style>
             """,
             unsafe_allow_html=True
-            )
+        )
         st.title("Moteur de Recherche de Corpus")
 
     def filtres(self):
+        """
+        @brief Définit les filtres de recherche via l'interface.
+        @return Tuple contenant les filtres (mots-clés, thèmes, dates, etc.).
+        """
         with st.sidebar:
             mot_cle = st.text_input("Entrez les mots-clés pour la recherche").strip()
             themes_selectionnes = st.multiselect("Sélectionnez les thèmes", ["Tous"] + list(THEMESCORPUS.keys()), default=["Tous"])
@@ -63,8 +82,16 @@ class StreamlitApp:
         return mot_cle, themes_selectionnes, date_debut, date_fin, auteur, sources, nombre_docs, choix_recherche
 
     def resultats_corpus(self, mot_cle, themes_selectionnes, sources, nombre_docs, auteur, date_debut, date_fin):
-        
-        # conditions filtres
+        """
+        @brief Effectue une recherche dans les corpus en fonction des filtres.
+        @param mot_cle Mots-clés recherchés.
+        @param themes_selectionnes Thèmes sélectionnés.
+        @param sources Sources sélectionnées.
+        @param nombre_docs Nombre de documents à extraire.
+        @param auteur Auteur filtré.
+        @param date_debut Date de début pour la recherche.
+        @param date_fin Date de fin pour la recherche.
+        """
         tous = "csv" in sources and "redditArxiv" in sources
         liste_noms_corpus = []
 
@@ -92,7 +119,6 @@ class StreamlitApp:
                     valeur = THEMESCORPUS[theme]
                     liste_noms_corpus.extend(valeur)
 
-        # Résultast de la recherche
         for nom_corpus in liste_noms_corpus:
             print("nom_corpus resultat ", nom_corpus)
             if nom_corpus.startswith("csv") and nom_corpus != "csvdiscours":
@@ -100,12 +126,12 @@ class StreamlitApp:
                 print("theme_corpus", theme_corpus)
                 documents_scores = self.resultats_corpus_discours.get(theme_corpus, [])
                 resultats = pd.DataFrame([{
-                'Titre': document.titre,
-                'Auteur': document.auteur,
-                'Date': document.date,
-                'Extrait': document.texte[:300],
-                'Score': score,
-                'URL': document.url
+                    'Titre': document.titre,
+                    'Auteur': document.auteur,
+                    'Date': document.date,
+                    'Extrait': document.texte[:300],
+                    'Score': score,
+                    'URL': document.url
                 } for chemin_document, score in documents_scores
                     for document in [self.charger_document_par_chemin(chemin_document)]
                     if mot_cle.lower() in document.texte.lower()])
@@ -121,6 +147,14 @@ class StreamlitApp:
             self.resultats_par_corpus[nom_corpus] = resultats
 
     def afficher_resultats(self, choix_recherche, mot_cle, auteur,date_debut,date_fin):
+        """
+        @brief Affiche les résultats de recherche dans différents formats.
+        @param choix_recherche Options de recherche sélectionnées.
+        @param mot_cle Mots-clés recherchés.
+        @param auteur Auteur filtré.
+        @param date_debut Date de début pour filtrer les résultats.
+        @param date_fin Date de fin pour filtrer les résultats.
+        """
         col1, col2 = st.columns([1, 3])
         with col2:
             
@@ -310,6 +344,9 @@ class StreamlitApp:
                         st.pyplot(fig)
 
     def executer(self):
+        """
+        @brief Point d'entrée principal pour exécuter l'application.
+        """
         self.config_interface()
  
         mot_cle, themes_selectionnes, date_debut, date_fin, auteur, sources, nombre_docs, choix_recherche = self.filtres()

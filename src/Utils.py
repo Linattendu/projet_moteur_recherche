@@ -6,22 +6,28 @@ import os
 import pickle
 
 class Utils:
+    """
+    @brief Classe utilitaire pour diverses opérations textuelles et de gestion de corpus.
+    """
     
     @staticmethod
     def decouper_en_phrases(texte):
-        """Découper les discours en phrases."""
+        """
+        @brief Découpe un texte en phrases.
+        @param texte Texte à découper.
+        @return Liste des phrases extraites du texte.
+        """
         return re.findall(r"[^.]+(?:\.(?:\s|\n))?", texte)
 
     
     @staticmethod
     def nettoyer_texte(texte):
         """
-        Nettoie un texte en supprimant les apostrophes, ponctuations et en mettant en minuscule.
-
-        @param texte : str
-            Le texte à nettoyer.
-        @return : str
-            Texte nettoyé et normalisé.
+        @brief Nettoie un texte pour le normaliser.
+        @details
+        Supprime les accents, ponctuations, espaces multiples et met en minuscules.
+        @param texte Texte à nettoyer.
+        @return Texte nettoyé.
         """
         # 1. Conversion en minuscules
         texte = texte.lower()
@@ -50,6 +56,11 @@ class Utils:
     
     @staticmethod
     def concatener_textes(corpus):
+        """
+        @brief Concatène et nettoie les textes de tous les documents d'un corpus.
+        @param corpus Instance du corpus contenant les documents.
+        @return Texte concaténé et nettoyé.
+        """
         texte_brut = ' '.join(doc.texte for doc in corpus.id2doc.values())
         texte_nettoye = Utils.nettoyer_texte(texte_brut)
         print("✅ Texte concaténé et nettoyé.")
@@ -58,10 +69,11 @@ class Utils:
     @staticmethod
     def dictionnaire_vocab(corpus):
         """
-        @brief Construit le dictionnaire de vocabulaire à partir des documents du corpus.
+        @brief Construit un dictionnaire de vocabulaire pour un corpus.
         @details
-        Il s'agit d'un dictionnaire des mots présents dans les documents du corpus avec leur index unique.
-        Utilisé pour transformer les requêtes (vecteur de recherche).
+        Associe chaque mot unique d'un corpus à un index pour le traitement textuel.
+        @param corpus Instance du corpus contenant les documents.
+        @return Dictionnaire {mot: index}.
         """
         index = 0
         vocabulaire = {}
@@ -89,6 +101,13 @@ class Utils:
      
     @staticmethod
     def extraire_extrait(texte, mot_cle, taille_contexte=10):
+        """
+        @brief Extrait un passage d'un texte autour d'un mot-clé.
+        @param texte Texte source.
+        @param mot_cle Mot-clé à rechercher.
+        @param taille_contexte Nombre de mots autour du mot-clé à inclure dans l'extrait.
+        @return Extrait contenant le mot-clé et son contexte.
+        """
         # Nettoyer le texte pour éviter les problèmes de casse
         mots = texte.lower().split()
         mot_cle = mot_cle.lower()

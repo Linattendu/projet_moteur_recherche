@@ -9,7 +9,14 @@ from src.constantes import *
 
 
 class ClassificateurThemesDiscours:
+    """
+    @class ClassificateurThemesDiscours
+    @brief Classe permettant de classer les documents par thèmes en fonction de mots-clés spécifiques.
+    """
     def __init__(self):
+        """
+        @brief Initialise les thèmes et leurs mots-clés associés.
+        """
         self.keywords_par_theme = {
             "science": ["research", "experiment", "innovation", "climate", "discovery", "laboratory", "physics"],
             "health": ["hospital", "medicare", "vaccine", "healthcare", "doctor", "nurse", "therapy"],
@@ -20,7 +27,9 @@ class ClassificateurThemesDiscours:
 
     def charger_corpus_depuis_db(self, nom_corpus):
         """
-        Charge les chemins des fichiers pickle (corpus, matrice TF-IDF et vocabulaire) depuis la base de données.
+        @brief Charge les chemins des fichiers pickle associés à un corpus depuis la base de données.
+        @param nom_corpus Nom du corpus.
+        @return Tuple contenant les chemins du corpus, de la matrice TF-IDF et du vocabulaire.
         """
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -40,12 +49,21 @@ class ClassificateurThemesDiscours:
 
     def charger_fichier_pickle(self, chemin):
         """
-        Charge un fichier pickle donné.
+        @brief Charge un fichier pickle à partir de son chemin.
+        @param chemin Chemin du fichier pickle.
+        @return Objet désérialisé depuis le fichier pickle.
         """
         with open(chemin, 'rb') as f:
             return pickle.load(f)
 
     def classifier_document_par_themes(self, doc_index, vocab, tfidf):
+        """
+        @brief Classe un document donné par thèmes en fonction des scores calculés.
+        @param doc_index Index du document dans le corpus.
+        @param vocab Vocabulaire contenant les mots-clés et leurs indices.
+        @param tfidf Matrice TF-IDF des documents.
+        @return Dictionnaire contenant les thèmes et leurs scores associés pour le document.
+        """
         if isinstance(tfidf, coo_matrix):
             tfidf = tfidf.tocsr()
         scores_par_theme = {}
@@ -61,7 +79,11 @@ class ClassificateurThemesDiscours:
 
     def creer_sous_corpus(self, corpus, vocab, tfidf):
         """
-        Classe les documents par thème en fonction des scores calculés.
+        @brief Classe les documents d'un corpus par thèmes en fonction des scores calculés.
+        @param corpus Corpus contenant les documents.
+        @param vocab Vocabulaire contenant les mots-clés et leurs indices.
+        @param tfidf Matrice TF-IDF des documents.
+        @return Dictionnaire contenant les thèmes et leurs documents associés.
         """
         corpus_themes_dynamiques = {}
 
@@ -80,7 +102,8 @@ class ClassificateurThemesDiscours:
 
     def sauvegarder_dans_bdd(self, resultats):
         """
-        Sauvegarde les résultats classifiés dans la base de données avec des chemins vers les documents pickle.
+        @brief Sauvegarde les résultats classifiés dans la base de données en incluant les chemins des documents pickle.
+        @param resultats Dictionnaire contenant les thèmes et les documents classifiés.
         """
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -113,7 +136,7 @@ class ClassificateurThemesDiscours:
 
     def analyser_csvdiscours(self):
         """
-        Analyse le corpus des discours CSV, classe les documents par thèmes et sauvegarde les résultats.
+        @brief Analyse le corpus des discours CSV, classe les documents par thèmes, et sauvegarde les résultats dans la base de données.
         """
         chemin_corpus, chemin_tfidf, chemin_vocab = self.charger_corpus_depuis_db("csvdiscours")
         if not chemin_corpus or not chemin_tfidf or not chemin_vocab:

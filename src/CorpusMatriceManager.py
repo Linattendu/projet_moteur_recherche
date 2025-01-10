@@ -27,15 +27,21 @@ themes_reddit_arxiv = [
 theme_csv = "discours"
 
 class CorpusMatriceManager:
-
+    """
+    @class CorpusMatriceManager
+    @brief Gère la création, la sauvegarde et la mise à jour des corpus et des matrices associées.
+    """
     def __init__(self):
+        """
+        @brief Initialise une connexion à la base de données et crée les tables nécessaires.
+        """
         self.conn = sqlite3.connect(DB_PATH)
         self.cursor = self.conn.cursor()
         self.creer_table()
 
     def creer_table(self):
         """
-        Crée la table corpus si elle n'existe pas.
+        @brief Crée la table `corpus` si elle n'existe pas déjà.
         """
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS corpus (
@@ -55,7 +61,9 @@ class CorpusMatriceManager:
 
     # CREATION CORPUS DISCOURS (CSV)
     def creer_corpus_discours(self):
-                
+        """
+        @brief Convertit un fichier CSV de discours en corpus et construit les matrices associées.
+        """    
         source = "csv"
         nom_corpus = source + theme_csv
         nom_fichier_corpus = f"corpus_{nom_corpus}"
@@ -93,7 +101,9 @@ class CorpusMatriceManager:
                            
     # CREATION CORPUS REDDIT/ARXIV (SCRAPER)
     def creer_corpus_reddit_arxiv(self):
-        
+        """
+        @brief Récupère les données Reddit et Arxiv pour différents thèmes et construit les corpus et matrices.
+        """
         for theme in tqdm(themes_reddit_arxiv, total=len(themes_reddit_arxiv)):
         
             source = "RedditArxiv"
@@ -118,6 +128,10 @@ class CorpusMatriceManager:
 
     # CONSTRUCTION DES MATRICES TF / TFxIDF
     def _construire_matrices(self, nom_corpus):
+        """
+        @brief Construit les matrices TF, TF-IDF et le vocabulaire pour un corpus donné.
+        @param nom_corpus Nom du corpus pour lequel les matrices seront construites.
+        """
         chemin_corpus = os.path.join(DATA_DIR_PKL, f"corpus_{nom_corpus}.pkl")
         chemin_TF = os.path.join(DATA_DIR_PKL, f"matriceTF_{nom_corpus}.pkl")
         chemin_TFxIDF = os.path.join(DATA_DIR_PKL, f"matriceTFIDF_{nom_corpus}.pkl")
@@ -142,6 +156,11 @@ class CorpusMatriceManager:
     
     # SAUVEGARDE PKL
     def _sauvegarder_pkl(self, fichier, nom_fichier):
+        """
+        @brief Sauvegarde un objet dans un fichier pickle.
+        @param fichier Objet à sauvegarder.
+        @param nom_fichier Nom du fichier pickle.
+        """
         chemin = os.path.join(DATA_DIR_PKL, f"{nom_fichier}.pkl")
         with open(chemin, 'wb') as f:
             pickle.dump(fichier, f)
@@ -150,9 +169,8 @@ class CorpusMatriceManager:
   
     def stocker_en_base_de_donnees(self):
         """
-        Parcourt les fichiers PKL et stocke les corpus et matrices dans la base de données.
+        @brief Parcourt les fichiers pickle et stocke leurs informations dans la base de données.
         """
-
         fichiers_pkl = os.listdir(DATA_DIR_PKL)
 
         # Étape 1 : Insérer d'abord tous les corpus
@@ -194,65 +212,13 @@ class CorpusMatriceManager:
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ''', (nom_corpus, theme, datetime.now(), chemin_corpus, chemin_TF, chemin_TFxIDF, chemin_vocab, chemin_frequence))
 
-                 #self.conn.commit()
                 print(f"Corpus inséré : {nom_corpus}")
 
-                # Étape 2 : Insérer les matrices et vocab
-                """ for fichier in fichiers_pkl:
-            if fichier.endswith(".pkl") and not fichier.startswith("corpus"):
-                chemin_fichier = os.path.join(DATA_DIR_PKL, fichier)
-                
-                # Déterminer le type de fichier
-                if fichier.startswith("matriceTFIDF"):
-                    type_fichier = "TFxIDF"
-                elif fichier.startswith("matriceTF"):
-                    type_fichier = "TF"
-                elif fichier.startswith("vocab"):
-                    type_fichier = "vocab"
-                elif fichier.startswith("frequenceMots"):
-                    type_fichier = "frequence"
-                else:
-                    continue
-
-                nom_corpus = "_".join(fichier.split("_")[1:]).replace(".pkl", "")
-
-                # Lire le fichier PKL
-                with open(chemin_fichier, 'rb') as f:
-                    contenu_pkl = f.read()
-
-                # Vérifier si le corpus existe
-                self.cursor.execute('''
-                SELECT * FROM corpus WHERE nom_corpus = ?
-                ''', (nom_corpus,))
-                existe = self.cursor.fetchone()
-
-                # Mettre à jour les matrices ou vocab si le corpus existe déjà
-                if existe:
-                    if type_fichier == "TF":
-                        self.cursor.execute('''
-                        UPDATE corpus SET matrice_TF_pkl = ? WHERE nom_corpus = ?
-                        ''', (contenu_pkl, nom_corpus))
-                        print(f"TF mis à jour pour : {nom_corpus}")
-
-                    elif type_fichier == "TFxIDF":
-                        self.cursor.execute('''
-                        UPDATE corpus SET matrice_TFxIDF_pkl = ? WHERE nom_corpus = ?
-                        ''', (contenu_pkl, nom_corpus))
-                        print(f"TFxIDF mis à jour pour : {nom_corpus}")
-
-                    elif type_fichier == "vocab":
-                        self.cursor.execute('''
-                        UPDATE corpus SET vocab_pkl = ? WHERE nom_corpus = ?
-                        ''', (contenu_pkl, nom_corpus))
-                        print(f"Vocab mis à jour pour : {nom_corpus}")
-                    
-                    elif type_fichier == "frequence":
-                        self.cursor.execute('''
-                        UPDATE corpus SET frequence_mots_pkl = ? WHERE nom_corpus = ?
-                        ''', (contenu_pkl, nom_corpus))
-                        print(f"Frequence mots mis à jour pour : {nom_corpus}") """
-
+ 
         self.conn.commit()
 
     def fermer_connexion(self):
+        """
+        @brief Ferme la connexion à la base de données.
+        """
         self.conn.close()

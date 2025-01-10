@@ -25,10 +25,15 @@ Les erreurs sont gérées et loguées via GestionErreurs.
 """
 class RedditScrap:
     """
-    Classe pour le scraping de données depuis Reddit avec pagination.
+    @brief Classe pour le scraping de données depuis Reddit avec pagination.
     """
 
     def __init__(self, corpus, erreur):
+        """
+        @brief Initialise la classe RedditScrap.
+        @param corpus Instance de CorpusSingleton pour stocker les données.
+        @param erreur Gestion des erreurs pendant le scraping.
+        """
         self.reddit = praw.Reddit(
             client_id=REDDIT_CLIENT_ID,
             client_secret=REDDIT_CLIENT_SECRET,
@@ -40,7 +45,10 @@ class RedditScrap:
 
     def recuperer_posts(self, theme, limit=10):
         """
-        Récupère les posts récents et les commentaires associés pour compléter les textes vides.
+        @brief Récupère les posts récents de Reddit.
+        @param theme Thème du subreddit à scraper.
+        @param limit Nombre maximum de posts à récupérer.
+        @details Complète les textes vides avec les commentaires si nécessaire.
         """
         try:
             theme = theme.replace(" ", "")
@@ -75,7 +83,6 @@ class RedditScrap:
                     theme=self.corpus.theme,
                     extra=post.num_comments
                     )
-                #print(f"Document ajouté : {post.title} (Commentaires inclus : {len(commentaire_concatene.split())} mots)")
                 self.corpus.ajouter_document(doc)
         
         except Exception as e:

@@ -38,20 +38,35 @@ URL de base pour interroger l'API Arxiv.
 """
 
 LOCAL_URL = "https://localhost:8080" 
-
-# ARXIV
-URL_ARXIV = "http://export.arxiv.org/api/query?"
 """
-@var URL_ARXIV
-URL de base pour interroger l'API Arxiv.
+@var LOCAL_URL
+@brief URL locale pour l'application.
+@details Peut être utilisée pour tester des fonctionnalités locales.
 """
 
 CSV_DISCOURS_PATH = "./data_discours/discours_US.csv"
+"""
+@var CSV_DISCOURS_PATH
+@brief Chemin du fichier CSV contenant les discours.
+"""
+
 CSV_DISCOURS_CLASSIFIE_PATH = "./discours_classifie"
+"""
+@var CSV_DISCOURS_CLASSIFIE_PATH
+@brief Chemin du dossier pour les discours classifiés.
+"""
 
 DATA_DIR_PKL=  "./DataPkl"   
+"""
+@var DATA_DIR_PKL
+@brief Chemin du dossier contenant les fichiers pickle.
+"""
 
 DB_PATH = "./db/corpus_matrix.sqlite"
+"""
+@var DB_PATH
+@brief Chemin de la base de données SQLite utilisée par l'application.
+"""
 
 THEMESCORPUS = {
             "politics": ["RedditArxivpolitics", "csvdiscours"],
@@ -61,3 +76,8 @@ THEMESCORPUS = {
             "science": ["RedditArxivscience", "csvscience"],
             "health": ["RedditArxivhealth", "csvhealth"]
         }
+"""
+@var THEMESCORPUS
+@brief Dictionnaire des thèmes disponibles dans l'application.
+@details Chaque thème est associé à deux listes : une pour Reddit/Arxiv et une pour les sources CSV.
+"""

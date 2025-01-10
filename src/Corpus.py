@@ -9,7 +9,16 @@ import uuid  # Pour générer des identifiants uniques
 
 
 class Corpus:
+    """
+    @class Corpus
+    @brief Représente un corpus de documents avec diverses fonctionnalités de recherche et d'analyse.
+    """
     def __init__(self, nom_corpus=None, theme=None):
+        """
+        @brief Initialise un nouveau corpus.
+        @param nom_corpus Nom du corpus (par défaut None).
+        @param theme Thème par défaut des documents dans le corpus.
+        """
         self.nom_corpus = nom_corpus
         self.authors = {}
         
@@ -23,7 +32,9 @@ class Corpus:
         
     def ajouter_document(self, doc):
         """
-        Ajoute un document au corpus avec nettoyage du texte.
+        @brief Ajoute un document au corpus.
+        @param doc Instance du document à ajouter.
+        @return True si le document est ajouté, False sinon.
         """        
         
         identifiant_unique = str(uuid.uuid4())  # Génération d'un identifiant unique (UUID)
@@ -51,23 +62,20 @@ class Corpus:
         if doc.theme is None:
             doc.theme = self.theme  # Utilisation du thème du corpus par défaut
         
-
         
-        #print(f"✅ Document ajouté : {doc.titre} (ID: {identifiant_unique})")
         return True
 
     def search(self, mot_cle):
         """
-        Recherche des passages contenant un mot-clé dans le texte concaténé du corpus.
+        @brief Recherche des passages contenant un mot-clé dans le texte concaténé du corpus.
+        @param mot_cle Mot-clé à rechercher.
+        @return Liste des passages contenant le mot-clé ou un message indiquant qu'aucun résultat n'a été trouvé.
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
             #print("🔄 Concaténation automatique du corpus...")
             self.texte_concatene = Utils.concatener_textes(self)
         
-        #print(f"🔍 Recherche du mot-clé : {mot_cle}\n")
-        #print(f"le texte du corpus : \n {self.texte_concatene} \n" )
-
         # Regex : capturer 4 mots avant et après le mot-clé
         pattern = rf'(\b\w+(?:\s+\w+){{0,3}}\s+)\b{re.escape(mot_cle.lower())}\b(\s+\w+(?:\s+\w+){{0,3}})'
 
@@ -90,7 +98,10 @@ class Corpus:
 
     def concorde(self, mot_cle, taille_contexte=30):
         """
-        Crée un concordancier pour un mot-clé donné à partir des textes du corpus.
+        @brief Génère un concordancier pour un mot-clé donné.
+        @param mot_cle Mot-clé à rechercher.
+        @param taille_contexte Nombre de caractères avant et après le mot-clé à inclure dans le contexte.
+        @return DataFrame contenant les contextes avant, après et le mot-clé trouvé.
         """
         # Vérification et concaténation automatique si nécessaire
         if not self.texte_concatene:
@@ -122,7 +133,8 @@ class Corpus:
     
     def afficher_premiers_documents(self, n=5):
         """
-        Affiche les n premiers documents du corpus.
+        @brief Affiche les n premiers documents du corpus.
+        @param n Nombre de documents à afficher (par défaut 5).
         """
         print(f"\n📄 Affichage des {n} premiers documents du corpus :\n")
         for i, doc in enumerate(list(self.id2doc.values())[:n]):
@@ -136,6 +148,11 @@ class Corpus:
 
     
     def stats(self, n=10):
+        """
+        @brief Renvoie les n mots les plus fréquents dans le corpus.
+        @param n Nombre de mots les plus fréquents à retourner (par défaut 10).
+        @return DataFrame contenant les mots et leur fréquence.
+        """
         compteur = Frequence.compter_occurrences(self.id2doc.values())
         freq_df = pd.DataFrame(compteur.most_common(n), columns=['Mot', 'Fréquence'])
         return freq_df

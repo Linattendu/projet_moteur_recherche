@@ -10,9 +10,24 @@ from src.Utils import Utils
 from datetime import datetime
 from src.constantes import *
 
+"""
+@file SearchEngine.py
+@brief Implémentation d'un moteur de recherche basé sur des matrices TF et TF-IDF.
+
+@details
+Ce module permet de rechercher des documents dans un corpus en utilisant des vecteurs de requêtes alignés avec une matrice TF-IDF.
+Il prend également en charge le filtrage par auteur et plage de dates, et affiche les résultats triés par pertinence.
+"""
 class SearchEngine:
+    """
+    @brief Classe représentant le moteur de recherche.
+    """
 
     def __init__(self, nom_corpus):
+        """
+        @brief Initialise le moteur de recherche pour un corpus donné.
+        @param nom_corpus Nom du corpus à utiliser.
+        """
         self.nom_corpus = nom_corpus
         self.corpus = None
         self.mat_TF = None
@@ -24,7 +39,8 @@ class SearchEngine:
 
     def _charger_corpus_matrices(self):
         """
-        Charge les matrices TF, TF-IDF, le vocabulaire et la fréquence des mots depuis les fichiers pickle.
+        @brief Charge les matrices TF, TF-IDF, le vocabulaire et la fréquence des mots.
+        @throws ValueError Si un fichier nécessaire est manquant.
         """
         chemins = self._charger_chemins_depuis_db()
 
@@ -47,7 +63,9 @@ class SearchEngine:
 
     def _charger_chemins_depuis_db(self):
         """
-        Récupère les chemins des fichiers liés au corpus depuis la base de données.
+        @brief Récupère les chemins des fichiers liés au corpus depuis la base de données.
+        @return Dictionnaire contenant les chemins des fichiers nécessaires.
+        @throws ValueError Si aucun chemin n'est trouvé dans la base de données.
         """
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -77,7 +95,9 @@ class SearchEngine:
 
     def vecteur_aligne_matrice(self, mots_cles):
         """
-        Transforme une requête utilisateur en vecteur aligné avec la matrice TF-IDF.
+        @brief Transforme une requête en vecteur aligné avec la matrice TF-IDF.
+        @param mots_cles Mots-clés de la requête.
+        @return Vecteur de requête aligné avec la matrice TF-IDF.
         """
         vecteur_requete = np.zeros(len(self.vocab))
         mots = mots_cles.lower().split()
@@ -97,7 +117,13 @@ class SearchEngine:
 
     def search(self, mots_cles, n_resultats=20, auteur=None, date_debut=None, date_fin=None):
         """
-        Recherche de documents avec gestion des expressions exactes et filtrage.
+        @brief Recherche des documents en fonction des mots-clés.
+        @param mots_cles Mots-clés à rechercher.
+        @param n_resultats Nombre maximum de résultats à retourner.
+        @param auteur Filtrer par auteur (optionnel).
+        @param date_debut Date de début de la plage (optionnel).
+        @param date_fin Date de fin de la plage (optionnel).
+        @return DataFrame contenant les résultats triés par pertinence.
         """
         if self.mat_TFxIDF is None:
             raise ValueError("La matrice TF-IDF n'a pas été construite.")
@@ -147,7 +173,7 @@ class SearchEngine:
 
     def afficher_matrices(self):
         """
-        Affiche les matrices TF et TF-IDF pour débogage.
+        @brief Affiche les matrices TF et TF-IDF pour débogage.
         """
         if self.mat_TF is not None:
             print("Matrice TF :")
